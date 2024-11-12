@@ -1,0 +1,422 @@
+openapi: 3.0.3
+info:
+  title: ProFile builder
+  version: 1.0.0
+servers:
+  - url: https://team2-profile-builder.free.beeceptor.com
+paths:
+  /api/cv:
+    post:
+      tags: [api]
+      summary: Create CV
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CV"
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+  /api/cv/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+    delete:
+      tags: [api]
+      summary: Delete CV by id
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+  /api/previews:
+    get:
+      tags: [api]
+      summary: Get previews of all CVs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Preview"
+  /api/personal-details/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+    get:
+      tags: [api]
+      summary: Get personal details by id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PersonalDetails"
+        "404":
+          description: Not Found
+    put:
+      tags: [api]
+      summary: Update personal details by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PersonalDetails"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+  /api/contacts/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+    get:
+      tags: [api]
+      summary: Get contacts by id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contacts"
+        "404":
+          description: Not Found
+    put:
+      tags: [api]
+      summary: Update contacts by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Contacts"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+  /api/education/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+    get:
+      tags: [api]
+      summary: Get education by id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Education"
+        "404":
+          description: Not Found
+    put:
+      tags: [api]
+      summary: Update education by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Education"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+  /api/work-experience/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+    get:
+      tags: [api]
+      summary: Get work experience by id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkExperience"
+        "404":
+          description: Not Found
+    put:
+      tags: [api]
+      summary: Update work experience by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkExperience"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+  /api/languages/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+    get:
+      tags: [api]
+      summary: Get languages by id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Languages"
+        "404":
+          description: Not Found
+    put:
+      tags: [api]
+      summary: Update languages by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Languages"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+  /programming-languages/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+    get:
+      tags: [api]
+      summary: Get programming languages by ID
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProgrammingLanguages"
+        "404":
+          description: Not Found
+    put:
+      tags: [api]
+      summary: Update Programming Language
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProgrammingLanguages"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+components:
+  parameters:
+    Id:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+        example: 0
+  schemas:
+    Period:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+          example: "2023-09-02"
+        end:
+          type: string
+          format: date
+          example: "2027-06-20"
+    Location:
+      type: object
+      properties:
+        country:
+          type: string
+        city:
+          type: string
+      enum:
+        - country: Ukraine
+          city: Kyiv
+        - country: Ukraine
+          city: Kharkiv
+        - country: Ukraine
+          city: Lviv
+        - country: Ukraine
+          city: Odesa
+      example:
+        country: Ukraine
+        city: Kharkiv
+
+    PersonalDetails:
+      type: object
+      properties:
+        fullname:
+          type: string
+          example: "John Doe"
+        gender:
+          type: string
+          enum: [Male, Female, Other]
+          example: Male
+        age:
+          type: integer
+          minimum: 14
+          example: 30
+        citizenship:
+          type: string
+          enum: [Ukrainian, British, French]
+          example: Ukrainian
+        maritalStatus:
+          type: string
+          enum: [Single, Married]
+          example: Single
+
+    Contacts:
+      type: object
+      properties:
+        emails:
+          type: array
+          items:
+            type: string
+            pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$
+            example: johnDoe@example.com
+          minLength: 1
+        phoneNumbers:
+          type: array
+          items:
+            type: string
+            pattern: ^(\+380 \d{2}|0\d{2}) \d{3}[\- ]\d{2}[\- ]\d{2}$
+            example: "+380 44 284-19-15"
+          minLength: 1
+        location:
+          $ref: "#/components/schemas/Location"
+
+    Course:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Bachelor of CS
+        institute:
+          type: string
+          example: Kharkiv National University of Radioelectronics
+        period:
+          $ref: "#/components/schemas/Period"
+    Education:
+      type: object
+      properties:
+        courses:
+          type: array
+          items:
+            $ref: "#/components/schemas/Course"
+          minLength: 1
+
+    JobRecord:
+      type: object
+      properties:
+        companyName:
+          type: string
+          example: "Tech Solutions"
+        location:
+          $ref: "#/components/schemas/Location"
+        position:
+          type: string
+          example: "Software Engineer"
+        period:
+          $ref: "#/components/schemas/Period"
+        achievements:
+          type: string
+          example: "Led a team of developers."
+    WorkExperience:
+      type: array
+      items:
+        $ref: "#/components/schemas/JobRecord"
+      minLength: 1
+
+    Language:
+      type: object
+      properties:
+        name:
+          type: string
+          enum: [Ukrainian, English, French]
+          example: English
+        level:
+          type: string
+          enum: [Native, A1, A2, B1, B2, C1, C2]
+          example: B2
+    Languages:
+      type: array
+      items:
+        $ref: "#/components/schemas/Language"
+      minLength: 1
+
+    ProgrammingLanguage:
+      type: object
+      properties:
+        name:
+          type: string
+          enum: [C++, C#, Java, Python, Go, Rust]
+          example: Go
+        level:
+          type: string
+          enum: [Trainee, Junior, Middle, Senior]
+          example: Junior
+    ProgrammingLanguages:
+      type: array
+      items:
+        $ref: "#/components/schemas/ProgrammingLanguage"
+      minLength: 1
+
+    CV:
+      type: object
+      properties:
+        personalDetails:
+          $ref: "#/components/schemas/PersonalDetails"
+        contacts:
+          $ref: "#/components/schemas/Contacts"
+        education:
+          $ref: "#/components/schemas/Education"
+        workExperience:
+          $ref: "#/components/schemas/WorkExperience"
+        languages:
+          $ref: "#/components/schemas/Languages"
+        programmingLanguages:
+          $ref: "#/components/schemas/ProgrammingLanguages"
+
+    Preview:
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 0
+          example: 0
+        personalDetails:
+          $ref: "#/components/schemas/PersonalDetails"
+        languages:
+          $ref: "#/components/schemas/Languages"
+        programmingLanguages:
+          $ref: "#/components/schemas/ProgrammingLanguages"
