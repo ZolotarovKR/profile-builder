@@ -4,6 +4,7 @@ info:
   version: 1.0.0
 servers:
   - url: https://team2-profile-builder.free.beeceptor.com
+  - url: http://localhost:8080
 paths:
   /api/cv:
     post:
@@ -314,81 +315,69 @@ components:
           minLength: 1
         location:
           $ref: "#/components/schemas/Location"
-
-    Course:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Bachelor of CS
-        institute:
-          type: string
-          example: Kharkiv National University of Radioelectronics
-        period:
-          $ref: "#/components/schemas/Period"
+      
     Education:
-      type: object
-      properties:
-        courses:
-          type: array
-          items:
-            $ref: "#/components/schemas/Course"
-          minLength: 1
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Bachelor of CS
+          institute:
+            type: string
+            example: Kharkiv National University of Radioelectronics
+          period:
+            $ref: "#/components/schemas/Period"
+            minLength: 1
 
-    JobRecord:
-      type: object
-      properties:
-        companyName:
-          type: string
-          example: "Tech Solutions"
-        location:
-          $ref: "#/components/schemas/Location"
-        position:
-          type: string
-          example: "Software Engineer"
-        period:
-          $ref: "#/components/schemas/Period"
-        achievements:
-          type: string
-          example: "Led a team of developers."
     WorkExperience:
       type: array
       items:
-        $ref: "#/components/schemas/JobRecord"
+        type: object
+        properties:
+          companyName:
+            type: string
+            example: "Tech Solutions"
+          location:
+            $ref: "#/components/schemas/Location"
+          position:
+            type: string
+            example: "Software Engineer"
+          period:
+            $ref: "#/components/schemas/Period"
+          achievements:
+            type: string
+            example: "Led a team of developers."
       minLength: 1
 
-    Language:
-      type: object
-      properties:
-        name:
-          type: string
-          enum: [Ukrainian, English, French]
-          example: English
-        level:
-          type: string
-          enum: [Native, A1, A2, B1, B2, C1, C2]
-          example: B2
     Languages:
       type: array
       items:
-        $ref: "#/components/schemas/Language"
+        type: object
+        properties:
+          name:
+            type: string
+            enum: [Ukrainian, English, French]
+            example: English
+          level:
+            type: string
+            enum: [Native, A1, A2, B1, B2, C1, C2]
       minLength: 1
 
-    ProgrammingLanguage:
-      type: object
-      properties:
-        name:
-          type: string
-          enum: [C++, C#, Java, Python, Go, Rust]
-          example: Go
-        level:
-          type: string
-          enum: [Trainee, Junior, Middle, Senior]
-          example: Junior
     ProgrammingLanguages:
       type: array
       items:
-        $ref: "#/components/schemas/ProgrammingLanguage"
+        type: object
+        properties:
+          name:
+            type: string
+            enum: [C++, C#, Java, Python, Go, Rust]
+            example: Go
+          level:
+            type: string
+            enum: [Trainee, Junior, Middle, Senior]
+            example: Junior
       minLength: 1
 
     CV:
