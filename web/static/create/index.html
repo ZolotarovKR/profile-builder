@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Create CV</title>
+        <script defer src="script.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    </head>
+    <body>
+        <form x-data="form" x-on:submit.prevent="submit()">
+            <h2>Personal Details</h2>
+            <!-- Full Name -->
+            <div>
+                <label for="inputFullName">Full Name:</label>
+                <input id="inputFullName" type="text" x-model="personalDetails.fullName" />
+            </div>
+            <!-- Gender -->
+            <fieldset>
+                <legend>Gender</legend>
+                <div>
+                    <input id="inputGenderMale" type="radio" x-model="personalDetails.gender" value="Male" />
+                    <label for="inputGenderMale">Male</label>
+                </div>
+                <div>
+                    <input id="inputGenderFemale" type="radio" x-model="personalDetails.gender" value="Female" />
+                    <label for="inputGenderFemale">Female</label>
+                </div>
+                <div>
+                    <input id="inputGenderOther" type="radio" x-model="personalDetails.gender" value="Other" />
+                    <label for="inputGenderOther">Other</label>
+                </div>
+            </fieldset>
+            <!-- Age -->
+            <div>
+                <label for="inputAge">Age:</label>
+                <input id="inputAge" type="number" x-model="personalDetails.age" />
+            </div>
+            <!-- Citizenship -->
+            <div>
+                <label for="inputCitizenship">Citizenship:</label>
+                <input id="inputCitizenship" type="text" x-model="personalDetails.citizenship" />
+            </div>
+            <!-- Marital Status -->
+            <fieldset>
+                <legend>Marital Status</legend>
+                <div>
+                    <input id="inputMaritalStatusSingle" type="radio" x-model="personalDetails.maritalStatus" value="Single" />
+                    <label for="inputMaritalStatusSingle">Single</label>
+                </div>
+                <div>
+                    <input id="inputMaritalStatusMarried" type="radio" x-model="personalDetails.maritalStatus" value="Married" />
+                    <label for="inputMaritalStatusSingle">Married</label>
+                </div>
+            </fieldset>
+            <!-- Languages -->
+            <h2>Languages</h2>
+            <template x-for="(language, idx) in languages">
+                <div>
+                    <div>
+                        <label x-bind:for="'inputLanguageName' + idx">Name:</label>
+                        <input x-bind:id="'inputLanguageName' + idx" type="text" x-model="language.name" />
+                    </div>
+                    <fieldset>
+                        <legend>Level</legend>
+                        <input x-bind:id="'inputLangugeLevelNative' + idx" type="radio" x-model="language.level" value="Native" />
+                        <label x-bind:for="'inputLangugeLevelNative' + idx">Native</label>
+                        <input x-bind:id="'inputLangugeLevelA1' + idx" type="radio" x-model="language.level" value="A1" />
+                        <label x-bind:for="'inputLangugeLevelA1' + idx">A1</label>
+                        <input x-bind:id="'inputLangugeLevelA2' + idx" type="radio" x-model="language.level" value="A2" />
+                        <label x-bind:for="'inputLangugeLevelA2' + idx">A2</label>
+                        <input x-bind:id="'inputLangugeLevelB1' + idx" type="radio" x-model="language.level" value="B1" />
+                        <label x-bind:for="'inputLangugeLevelB1' + idx">B1</label>
+                        <input x-bind:id="'inputLangugeLevelB2' + idx" type="radio" x-model="language.level" value="B2" />
+                        <label x-bind:for="'inputLangugeLevelB2' + idx">B2</label>
+                        <input x-bind:id="'inputLangugeLevelC1' + idx" type="radio" x-model="language.level" value="C1" />
+                        <label x-bind:for="'inputLangugeLevelC1' + idx">C1</label>
+                        <input x-bind:id="'inputLangugeLevelC2' + idx" type="radio" x-model="language.level" value="C2" />
+                        <label x-bind:for="'inputLangugeLevelC2' + idx">C2</label>
+                    </fieldset>
+                    <div>
+                        <button x-on:click="languages.splice(idx, 1)">Remove</button>
+                    </div>
+                </div>
+            </template>
+            <div>
+                <button x-on:click="languages.push({ name: '', level: '' })">Add</button>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </body>
+</html>
