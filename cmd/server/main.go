@@ -33,6 +33,9 @@ func main() {
 	r.HandleFunc("/api/programming-languages/{id}", handlers.GetProgrammingLanguages).Methods("GET")
 	r.HandleFunc("/api/programming-languages/{id}", handlers.PutProgrammingLanguages).Methods("PUT")
 
+	fs := http.FileServer(http.Dir("./web/static"))
+	r.PathPrefix("/").Handler(fs)
+
 	log.Print("Starting server at :8080")
 	err := http.ListenAndServe(":8080", r)
 	if err != nil {
