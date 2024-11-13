@@ -37,7 +37,7 @@ document.addEventListener('alpine:init', () => {
             });
             switch (resp.status) {
                 case 201:
-                    alert('Created');
+                    window.location.replace('/');
                     break;
                 case 400:
                     alert(await resp.text());
