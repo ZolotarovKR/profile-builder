@@ -20,8 +20,6 @@ document.addEventListener('alpine:init', () => {
         languages: [],
         programmingLanguages: [],
 
-        submit() {
-            console.log(this.languages);
-        },
+        submit() {},
     }));
 });

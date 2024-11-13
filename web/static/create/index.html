@@ -83,6 +83,34 @@
                 <label for="inputLocationCity">City:</label>
                 <input id="inputLocationCity" type="text" x-model="contacts.location.city" />
             </div>
+            <!-- Education -->
+            <h2>Education</h2>
+            <template x-for="(course, idx) in education">
+                <div>
+                    <div>
+                        <label x-bind:for="'inputEducationName' + idx">Name:</label>
+                        <input x-bind:id="'inputEducationName' + idx" type="text" x-model="education[idx].name" />
+                    </div>
+                    <div>
+                        <label x-bind:for="'inputEducationInstitute' + idx">Institute:</label>
+                        <input x-bind:id="'inputEducationInstitute' + idx" type="text" x-model="education[idx].institute" />
+                    </div>
+                    <div>
+                        <label x-bind:for="'inputEducationStart' + idx">Start date:</label>
+                        <input x-bind:id="'inputEducationStart' + idx" type="text" x-model="education[idx].period.start" />
+                    </div>
+                    <div>
+                        <label x-bind:for="'inputEducationEnd' + idx">End date:</label>
+                        <input x-bind:id="'inputEducationEnd' + idx" type="text" x-model="education[idx].period.end" />
+                    </div>
+                    <div>
+                        <button x-on:click="education.splice(idx, 1)">Remove</button>
+                    </div>
+                </div>
+            </template>
+            <div>
+                <button x-on:click="education.push({ name: '', institute: '', period: { start: '', end: '' } })">Add</button>
+            </div>
             <!-- Languages -->
             <h2>Languages</h2>
             <template x-for="(language, idx) in languages">
