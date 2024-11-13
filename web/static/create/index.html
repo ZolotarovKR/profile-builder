@@ -57,21 +57,21 @@
                 <template x-for="(email, idx) in contacts.emails">
                     <div>
                         <input x-bind:id="'inputEmail' + idx" type="email" x-model="contacts.emails[idx]" />
-                        <button x-on:click="contacts.emails.splice(idx, 1)">Remove</button>
+                        <button type="button" x-on:click="contacts.emails.splice(idx, 1)">Remove</button>
                     </div>
                 </template>
                 <div>
-                    <button x-on:click="contacts.emails.push('')">Add</button>
+                    <button type="button" x-on:click="contacts.emails.push('')">Add</button>
                 </div>
                 <h3>Phone Numbers</h3>
                 <template x-for="(phoneNumber, idx) in contacts.phoneNumbers">
                     <div>
                         <input x-bind:id="'inputPhoneNumber' + idx" type="text" x-model="contacts.phoneNumbers[idx]" />
-                        <button x-on:click="contacts.phoneNumbers.splice(idx, 1)">Remove</button>
+                        <button type="button" x-on:click="contacts.phoneNumbers.splice(idx, 1)">Remove</button>
                     </div>
                 </template>
                 <div>
-                    <button x-on:click="contacts.phoneNumbers.push('')">Add</button>
+                    <button type="button" x-on:click="contacts.phoneNumbers.push('')">Add</button>
                 </div>
                 <h3>Location</h3>
                 <div>
@@ -105,12 +105,12 @@
                             <input x-bind:id="'inputEducationEnd' + idx" type="text" x-model="education[idx].period.end" />
                         </div>
                         <div>
-                            <button x-on:click="education.splice(idx, 1)">Remove</button>
+                            <button type="button" x-on:click="education.splice(idx, 1)">Remove</button>
                         </div>
                     </div>
                 </template>
                 <div>
-                    <button x-on:click="education.push({ name: '', institute: '', period: { start: '', end: '' } })">Add</button>
+                    <button type="button" x-on:click="education.push({ name: '', institute: '', period: { start: '', end: '' } })">Add</button>
                 </div>
             </section>
 
@@ -144,12 +144,13 @@
                         </div>
                         <textarea placeholder="Write your achievements..." x-model="jobRecord.achievements"></textarea>
                         <div>
-                            <button x-on:click="workExperience.splice(idx, 1)">Remove</button>
+                            <button type="button" x-on:click="workExperience.splice(idx, 1)">Remove</button>
                         </div>
                     </div>
                 </template>
                 <div>
                     <button
+                        type="button"
                         x-on:click="workExperience.push({ companyName: '', location: { country: '', city: '' }, position: '', period: { start: '', end: '' } })"
                     >
                         Add
@@ -231,12 +232,12 @@
                             <label x-bind:for="'inputLangugeLevelC2' + idx">C2</label>
                         </fieldset>
                         <div>
-                            <button x-on:click="languages.splice(idx, 1)">Remove</button>
+                            <button type="button" x-on:click="languages.splice(idx, 1)">Remove</button>
                         </div>
                     </div>
                 </template>
                 <div>
-                    <button x-on:click="languages.push({ name: '', level: '' })">Add</button>
+                    <button type="button" x-on:click="languages.push({ name: '', level: '' })">Add</button>
                 </div>
             </section>
 
@@ -294,12 +295,12 @@
                             <label x-bind:for="'inputProgrammingLanguageLevelSenior' + idx">Senior</label>
                         </fieldset>
                         <div>
-                            <button x-on:click="programmingLanguages.splice(idx, 1)">Remove</button>
+                            <button type="button" x-on:click="programmingLanguages.splice(idx, 1)">Remove</button>
                         </div>
                     </div>
                 </template>
                 <div>
-                    <button x-on:click="programmingLanguages.push({ name: '', level: '' })">Add</button>
+                    <button type="button" x-on:click="programmingLanguages.push({ name: '', level: '' })">Add</button>
                 </div>
             </section>
 
