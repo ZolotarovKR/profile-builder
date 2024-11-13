@@ -114,6 +114,49 @@
                 </div>
             </section>
 
+            <h2>Work Experience</h2>
+            <section>
+                <template x-for="(jobRecord, idx) in workExperience">
+                    <div>
+                        <div>
+                            <label x-bind:for="'inputJobRecordCompanyName' + idx">Company name:</label>
+                            <input x-bind:id="'inputJobRecordCompanyName' + idx" type="text" x-model="jobRecord.companyName" />
+                        </div>
+                        <div>
+                            <label x-bind:for="'inputJobRecordLocationCountry' + idx">Country:</label>
+                            <input x-bind:id="'inputJobRecordLocationCountry' + idx" type="text" x-model="jobRecord.location.country" />
+                        </div>
+                        <div>
+                            <label x-bind:for="'inputJobRecordLocationCity' + idx">City</label>
+                            <input x-bind:id="'inputJobRecordLocationCity' + idx" type="text" x-model="jobRecord.location.city" />
+                        </div>
+                        <div>
+                            <label for="'inputJobRecordPosition' + idx">Position:</label>
+                            <input x-bind:id="'inputJobRecordPosition' + idx" type="text" x-model="jobRecord.position" />
+                        </div>
+                        <div>
+                            <label for="'inputJobRecordPeriodStart' + idx">Start date:</label>
+                            <input x-bind:id="'inputJobRecordPeriodStart' + idx" type="text" x-model="jobRecord.period.start" />
+                        </div>
+                        <div>
+                            <label for="'inputJobRecordPeriodEnd' + idx">End date:</label>
+                            <input x-bind:id="'inputJobRecordPeriodEnd' + idx" type="text" x-model="jobRecord.period.end" />
+                        </div>
+                        <textarea placeholder="Write your achievements..." x-model="jobRecord.achievements"></textarea>
+                        <div>
+                            <button x-on:click="workExperience.splice(idx, 1)">Remove</button>
+                        </div>
+                    </div>
+                </template>
+                <div>
+                    <button
+                        x-on:click="workExperience.push({ companyName: '', location: { country: '', city: '' }, position: '', period: { start: '', end: '' } })"
+                    >
+                        Add
+                    </button>
+                </div>
+            </section>
+
             <h2>Languages</h2>
             <section>
                 <template x-for="(language, idx) in languages">
