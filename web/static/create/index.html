@@ -47,7 +47,7 @@
                     </div>
                     <div>
                         <input id="inputMaritalStatusMarried" type="radio" x-model="personalDetails.maritalStatus" value="Married" />
-                        <label for="inputMaritalStatusSingle">Married</label>
+                        <label for="inputMaritalStatusMarried">Married</label>
                     </div>
                 </fieldset>
             </section>
@@ -57,7 +57,7 @@
                 <h3>Emails</h3>
                 <template x-for="(email, idx) in contacts.emails">
                     <div>
-                        <input x-bind:id="'inputEmail' + idx" type="email" x-model="contacts.emails[idx]" />
+                        <input type="email" x-model="contacts.emails[idx]" />
                         <button type="button" x-on:click="contacts.emails.splice(idx, 1)">Remove</button>
                     </div>
                 </template>
@@ -67,7 +67,7 @@
                 <h3>Phone Numbers</h3>
                 <template x-for="(phoneNumber, idx) in contacts.phoneNumbers">
                     <div>
-                        <input x-bind:id="'inputPhoneNumber' + idx" type="text" x-model="contacts.phoneNumbers[idx]" />
+                        <input type="text" x-model="contacts.phoneNumbers[idx]" />
                         <button type="button" x-on:click="contacts.phoneNumbers.splice(idx, 1)">Remove</button>
                     </div>
                 </template>
@@ -163,16 +163,14 @@
             <section>
                 <template x-for="(language, idx) in languages">
                     <div>
-                        <!-- Name -->
                         <label for="inputLanguageName">Select name:</label>
                         <select x-model="language.name" id="inputLanguageName">
-                            <option value="" selected>---</option>
+                            <option value="" selected>-</option>
                             <option value="Ukrainian">Ukrainian</option>
                             <option value="English">English</option>
                             <option value="German">German</option>
                             <option value="French">French</option>
                         </select>
-                        <!-- Level -->
                         <fieldset>
                             <legend>Level</legend>
                             <input
@@ -246,10 +244,9 @@
             <section>
                 <template x-for="(programmingLanguage, idx) in programmingLanguages">
                     <div>
-                        <!-- Name -->
                         <label for="inputProgrammingLanguageName">Select name:</label>
                         <select x-model="programmingLanguage.name" id="inputProgrammingLanguageName">
-                            <option value="" selected>---</option>
+                            <option value="" selected>-</option>
                             <option value="C++">C++</option>
                             <option value="C#">C#</option>
                             <option value="Java">Java</option>
@@ -259,7 +256,6 @@
                             <option value="Rust">Rust</option>
                             <option value="Golang">Golang</option>
                         </select>
-                        <!-- Level -->
                         <fieldset>
                             <legend>Level</legend>
                             <input
