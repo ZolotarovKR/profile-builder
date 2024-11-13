@@ -10,249 +10,256 @@
     <body>
         <form x-data="form" x-on:submit.prevent="submit()">
             <h2>Personal Details</h2>
-            <!-- Full Name -->
-            <div>
-                <label for="inputFullName">Full Name:</label>
-                <input id="inputFullName" type="text" x-model="personalDetails.fullName" />
-            </div>
-            <!-- Gender -->
-            <fieldset>
-                <legend>Gender</legend>
+            <section>
                 <div>
-                    <input id="inputGenderMale" type="radio" x-model="personalDetails.gender" value="Male" />
-                    <label for="inputGenderMale">Male</label>
+                    <label for="inputFullName">Full Name:</label>
+                    <input id="inputFullName" type="text" x-model="personalDetails.fullName" />
+                </div>
+                <fieldset>
+                    <legend>Gender</legend>
+                    <div>
+                        <input id="inputGenderMale" type="radio" x-model="personalDetails.gender" value="Male" />
+                        <label for="inputGenderMale">Male</label>
+                    </div>
+                    <div>
+                        <input id="inputGenderFemale" type="radio" x-model="personalDetails.gender" value="Female" />
+                        <label for="inputGenderFemale">Female</label>
+                    </div>
+                    <div>
+                        <input id="inputGenderOther" type="radio" x-model="personalDetails.gender" value="Other" />
+                        <label for="inputGenderOther">Other</label>
+                    </div>
+                </fieldset>
+                <div>
+                    <label for="inputAge">Age:</label>
+                    <input id="inputAge" type="number" x-model="personalDetails.age" />
                 </div>
                 <div>
-                    <input id="inputGenderFemale" type="radio" x-model="personalDetails.gender" value="Female" />
-                    <label for="inputGenderFemale">Female</label>
+                    <label for="inputCitizenship">Citizenship:</label>
+                    <input id="inputCitizenship" type="text" x-model="personalDetails.citizenship" />
                 </div>
-                <div>
-                    <input id="inputGenderOther" type="radio" x-model="personalDetails.gender" value="Other" />
-                    <label for="inputGenderOther">Other</label>
-                </div>
-            </fieldset>
-            <!-- Age -->
-            <div>
-                <label for="inputAge">Age:</label>
-                <input id="inputAge" type="number" x-model="personalDetails.age" />
-            </div>
-            <!-- Citizenship -->
-            <div>
-                <label for="inputCitizenship">Citizenship:</label>
-                <input id="inputCitizenship" type="text" x-model="personalDetails.citizenship" />
-            </div>
-            <!-- Marital Status -->
-            <fieldset>
-                <legend>Marital Status</legend>
-                <div>
-                    <input id="inputMaritalStatusSingle" type="radio" x-model="personalDetails.maritalStatus" value="Single" />
-                    <label for="inputMaritalStatusSingle">Single</label>
-                </div>
-                <div>
-                    <input id="inputMaritalStatusMarried" type="radio" x-model="personalDetails.maritalStatus" value="Married" />
-                    <label for="inputMaritalStatusSingle">Married</label>
-                </div>
-            </fieldset>
+                <fieldset>
+                    <legend>Marital Status</legend>
+                    <div>
+                        <input id="inputMaritalStatusSingle" type="radio" x-model="personalDetails.maritalStatus" value="Single" />
+                        <label for="inputMaritalStatusSingle">Single</label>
+                    </div>
+                    <div>
+                        <input id="inputMaritalStatusMarried" type="radio" x-model="personalDetails.maritalStatus" value="Married" />
+                        <label for="inputMaritalStatusSingle">Married</label>
+                    </div>
+                </fieldset>
+            </section>
+
             <h2>Contacts</h2>
-            <h3>Emails</h3>
-            <template x-for="(email, idx) in contacts.emails">
+            <section>
+                <h3>Emails</h3>
+                <template x-for="(email, idx) in contacts.emails">
+                    <div>
+                        <input x-bind:id="'inputEmail' + idx" type="email" x-model="contacts.emails[idx]" />
+                        <button x-on:click="contacts.emails.splice(idx, 1)">Remove</button>
+                    </div>
+                </template>
                 <div>
-                    <input x-bind:id="'inputEmail' + idx" type="email" x-model="contacts.emails[idx]" />
-                    <button x-on:click="contacts.emails.splice(idx, 1)">Remove</button>
+                    <button x-on:click="contacts.emails.push('')">Add</button>
                 </div>
-            </template>
-            <div>
-                <button x-on:click="contacts.emails.push('')">Add</button>
-            </div>
-            <h3>Phone Numbers</h3>
-            <template x-for="(phoneNumber, idx) in contacts.phoneNumbers">
+                <h3>Phone Numbers</h3>
+                <template x-for="(phoneNumber, idx) in contacts.phoneNumbers">
+                    <div>
+                        <input x-bind:id="'inputPhoneNumber' + idx" type="text" x-model="contacts.phoneNumbers[idx]" />
+                        <button x-on:click="contacts.phoneNumbers.splice(idx, 1)">Remove</button>
+                    </div>
+                </template>
                 <div>
-                    <input x-bind:id="'inputPhoneNumber' + idx" type="text" x-model="contacts.phoneNumbers[idx]" />
-                    <button x-on:click="contacts.phoneNumbers.splice(idx, 1)">Remove</button>
+                    <button x-on:click="contacts.phoneNumbers.push('')">Add</button>
                 </div>
-            </template>
-            <div>
-                <button x-on:click="contacts.phoneNumbers.push('')">Add</button>
-            </div>
-            <h3>Location</h3>
-            <div>
-                <label for="inputLocationCountry">Country:</label>
-                <input id="inputLocationCountry" type="text" x-model="contacts.location.country" />
-            </div>
-            <div>
-                <label for="inputLocationCity">City:</label>
-                <input id="inputLocationCity" type="text" x-model="contacts.location.city" />
-            </div>
-            <!-- Education -->
+                <h3>Location</h3>
+                <div>
+                    <label for="inputLocationCountry">Country:</label>
+                    <input id="inputLocationCountry" type="text" x-model="contacts.location.country" />
+                </div>
+                <div>
+                    <label for="inputLocationCity">City:</label>
+                    <input id="inputLocationCity" type="text" x-model="contacts.location.city" />
+                </div>
+            </section>
+
             <h2>Education</h2>
-            <template x-for="(course, idx) in education">
+            <section>
+                <template x-for="(course, idx) in education">
+                    <div>
+                        <div>
+                            <label x-bind:for="'inputEducationName' + idx">Name:</label>
+                            <input x-bind:id="'inputEducationName' + idx" type="text" x-model="education[idx].name" />
+                        </div>
+                        <div>
+                            <label x-bind:for="'inputEducationInstitute' + idx">Institute:</label>
+                            <input x-bind:id="'inputEducationInstitute' + idx" type="text" x-model="education[idx].institute" />
+                        </div>
+                        <div>
+                            <label x-bind:for="'inputEducationStart' + idx">Start date:</label>
+                            <input x-bind:id="'inputEducationStart' + idx" type="text" x-model="education[idx].period.start" />
+                        </div>
+                        <div>
+                            <label x-bind:for="'inputEducationEnd' + idx">End date:</label>
+                            <input x-bind:id="'inputEducationEnd' + idx" type="text" x-model="education[idx].period.end" />
+                        </div>
+                        <div>
+                            <button x-on:click="education.splice(idx, 1)">Remove</button>
+                        </div>
+                    </div>
+                </template>
                 <div>
-                    <div>
-                        <label x-bind:for="'inputEducationName' + idx">Name:</label>
-                        <input x-bind:id="'inputEducationName' + idx" type="text" x-model="education[idx].name" />
-                    </div>
-                    <div>
-                        <label x-bind:for="'inputEducationInstitute' + idx">Institute:</label>
-                        <input x-bind:id="'inputEducationInstitute' + idx" type="text" x-model="education[idx].institute" />
-                    </div>
-                    <div>
-                        <label x-bind:for="'inputEducationStart' + idx">Start date:</label>
-                        <input x-bind:id="'inputEducationStart' + idx" type="text" x-model="education[idx].period.start" />
-                    </div>
-                    <div>
-                        <label x-bind:for="'inputEducationEnd' + idx">End date:</label>
-                        <input x-bind:id="'inputEducationEnd' + idx" type="text" x-model="education[idx].period.end" />
-                    </div>
-                    <div>
-                        <button x-on:click="education.splice(idx, 1)">Remove</button>
-                    </div>
+                    <button x-on:click="education.push({ name: '', institute: '', period: { start: '', end: '' } })">Add</button>
                 </div>
-            </template>
-            <div>
-                <button x-on:click="education.push({ name: '', institute: '', period: { start: '', end: '' } })">Add</button>
-            </div>
-            <!-- Languages -->
+            </section>
+
             <h2>Languages</h2>
-            <template x-for="(language, idx) in languages">
-                <div>
-                    <!-- Name -->
-                    <label for="inputLanguageName">Select name:</label>
-                    <select x-model="language.name" id="inputLanguageName">
-                        <option value="" selected>---</option>
-                        <option value="Ukrainian">Ukrainian</option>
-                        <option value="English">English</option>
-                        <option value="German">German</option>
-                        <option value="French">French</option>
-                    </select>
-                    <!-- Level -->
-                    <fieldset>
-                        <legend>Level</legend>
-                        <input
-                            x-bind:id="'inputLangugeLevelNative' + idx"
-                            type="radio"
-                            x-model="language.level"
-                            x-bind:name="'inputLanguageLevel' + idx"
-                            value="Native"
-                        />
-                        <label x-bind:for="'inputLangugeLevelNative' + idx">Native</label>
-                        <input
-                            x-bind:id="'inputLangugeLevelA1' + idx"
-                            type="radio"
-                            x-model="language.level"
-                            x-bind:name="'inputLanguageLevel' + idx"
-                            value="A1"
-                        />
-                        <label x-bind:for="'inputLangugeLevelA1' + idx">A1</label>
-                        <input
-                            x-bind:id="'inputLangugeLevelA2' + idx"
-                            type="radio"
-                            x-model="language.level"
-                            x-bind:name="'inputLanguageLevel' + idx"
-                            value="A2"
-                        />
-                        <label x-bind:for="'inputLangugeLevelA2' + idx">A2</label>
-                        <input
-                            x-bind:id="'inputLangugeLevelB1' + idx"
-                            type="radio"
-                            x-model="language.level"
-                            x-bind:name="'inputLanguageLevel' + idx"
-                            value="B1"
-                        />
-                        <label x-bind:for="'inputLangugeLevelB1' + idx">B1</label>
-                        <input
-                            x-bind:id="'inputLangugeLevelB2' + idx"
-                            type="radio"
-                            x-model="language.level"
-                            x-bind:name="'inputLanguageLevel' + idx"
-                            value="B2"
-                        />
-                        <label x-bind:for="'inputLangugeLevelB2' + idx">B2</label>
-                        <input
-                            x-bind:id="'inputLangugeLevelC1' + idx"
-                            type="radio"
-                            x-model="language.level"
-                            x-bind:name="'inputLanguageLevel' + idx"
-                            value="C1"
-                        />
-                        <label x-bind:for="'inputLangugeLevelC1' + idx">C1</label>
-                        <input
-                            x-bind:id="'inputLangugeLevelC2' + idx"
-                            type="radio"
-                            x-model="language.level"
-                            x-bind:name="'inputLanguageLevel' + idx"
-                            value="C2"
-                        />
-                        <label x-bind:for="'inputLangugeLevelC2' + idx">C2</label>
-                    </fieldset>
+            <section>
+                <template x-for="(language, idx) in languages">
                     <div>
-                        <button x-on:click="languages.splice(idx, 1)">Remove</button>
+                        <!-- Name -->
+                        <label for="inputLanguageName">Select name:</label>
+                        <select x-model="language.name" id="inputLanguageName">
+                            <option value="" selected>---</option>
+                            <option value="Ukrainian">Ukrainian</option>
+                            <option value="English">English</option>
+                            <option value="German">German</option>
+                            <option value="French">French</option>
+                        </select>
+                        <!-- Level -->
+                        <fieldset>
+                            <legend>Level</legend>
+                            <input
+                                x-bind:id="'inputLangugeLevelNative' + idx"
+                                type="radio"
+                                x-model="language.level"
+                                x-bind:name="'inputLanguageLevel' + idx"
+                                value="Native"
+                            />
+                            <label x-bind:for="'inputLangugeLevelNative' + idx">Native</label>
+                            <input
+                                x-bind:id="'inputLangugeLevelA1' + idx"
+                                type="radio"
+                                x-model="language.level"
+                                x-bind:name="'inputLanguageLevel' + idx"
+                                value="A1"
+                            />
+                            <label x-bind:for="'inputLangugeLevelA1' + idx">A1</label>
+                            <input
+                                x-bind:id="'inputLangugeLevelA2' + idx"
+                                type="radio"
+                                x-model="language.level"
+                                x-bind:name="'inputLanguageLevel' + idx"
+                                value="A2"
+                            />
+                            <label x-bind:for="'inputLangugeLevelA2' + idx">A2</label>
+                            <input
+                                x-bind:id="'inputLangugeLevelB1' + idx"
+                                type="radio"
+                                x-model="language.level"
+                                x-bind:name="'inputLanguageLevel' + idx"
+                                value="B1"
+                            />
+                            <label x-bind:for="'inputLangugeLevelB1' + idx">B1</label>
+                            <input
+                                x-bind:id="'inputLangugeLevelB2' + idx"
+                                type="radio"
+                                x-model="language.level"
+                                x-bind:name="'inputLanguageLevel' + idx"
+                                value="B2"
+                            />
+                            <label x-bind:for="'inputLangugeLevelB2' + idx">B2</label>
+                            <input
+                                x-bind:id="'inputLangugeLevelC1' + idx"
+                                type="radio"
+                                x-model="language.level"
+                                x-bind:name="'inputLanguageLevel' + idx"
+                                value="C1"
+                            />
+                            <label x-bind:for="'inputLangugeLevelC1' + idx">C1</label>
+                            <input
+                                x-bind:id="'inputLangugeLevelC2' + idx"
+                                type="radio"
+                                x-model="language.level"
+                                x-bind:name="'inputLanguageLevel' + idx"
+                                value="C2"
+                            />
+                            <label x-bind:for="'inputLangugeLevelC2' + idx">C2</label>
+                        </fieldset>
+                        <div>
+                            <button x-on:click="languages.splice(idx, 1)">Remove</button>
+                        </div>
                     </div>
+                </template>
+                <div>
+                    <button x-on:click="languages.push({ name: '', level: '' })">Add</button>
                 </div>
-            </template>
-            <div>
-                <button x-on:click="languages.push({ name: '', level: '' })">Add</button>
-            </div>
-            <!-- Programming Languages -->
+            </section>
+
             <h2>Programming Languages</h2>
-            <template x-for="(programmingLanguage, idx) in programmingLanguages">
-                <div>
-                    <!-- Name -->
-                    <label for="inputProgrammingLanguageName">Select name:</label>
-                    <select x-model="programmingLanguage.name" id="inputProgrammingLanguageName">
-                        <option value="" selected>---</option>
-                        <option value="C++">C++</option>
-                        <option value="C#">C#</option>
-                        <option value="Java">Java</option>
-                        <option value="Python">Python</option>
-                        <option value="Ruby">Ruby</option>
-                        <option value="C">C</option>
-                        <option value="Rust">Rust</option>
-                        <option value="Golang">Golang</option>
-                    </select>
-                    <!-- Level -->
-                    <fieldset>
-                        <legend>Level</legend>
-                        <input
-                            x-bind:id="'inputProgrammingLanguageLevelTrainee' + idx"
-                            type="radio"
-                            x-model="programmingLanguage.level"
-                            x-bind:name="'inputProgrammingLanguageLevel' + idx"
-                            value="Trainee"
-                        />
-                        <label x-bind:for="'inputProgrammingLanguageLevelTrainee' + idx">Trainee</label>
-                        <input
-                            x-bind:id="'inputProgrammingLanguageLevelJunior' + idx"
-                            type="radio"
-                            x-model="programmingLanguage.level"
-                            x-bind:name="'inputProgrammingLanguageLevel' + idx"
-                            value="Junior"
-                        />
-                        <label x-bind:for="'inputProgrammingLanguageLevelJunior' + idx">Junior</label>
-                        <input
-                            x-bind:id="'inputProgrammingLanguageLevelMiddle' + idx"
-                            type="radio"
-                            x-model="programmingLanguage.level"
-                            x-bind:name="'inputProgrammingLanguageLevel' + idx"
-                            value="Middle"
-                        />
-                        <label x-bind:for="'inputProgrammingLanguageLevelMiddle' + idx">Middle</label>
-                        <input
-                            x-bind:id="'inputProgrammingLanguageLevelSenior' + idx"
-                            type="radio"
-                            x-model="programmingLanguage.level"
-                            x-bind:name="'inputProgrammingLanguageLevel' + idx"
-                            value="Senior"
-                        />
-                        <label x-bind:for="'inputProgrammingLanguageLevelSenior' + idx">Senior</label>
-                    </fieldset>
+            <section>
+                <template x-for="(programmingLanguage, idx) in programmingLanguages">
                     <div>
-                        <button x-on:click="programmingLanguages.splice(idx, 1)">Remove</button>
+                        <!-- Name -->
+                        <label for="inputProgrammingLanguageName">Select name:</label>
+                        <select x-model="programmingLanguage.name" id="inputProgrammingLanguageName">
+                            <option value="" selected>---</option>
+                            <option value="C++">C++</option>
+                            <option value="C#">C#</option>
+                            <option value="Java">Java</option>
+                            <option value="Python">Python</option>
+                            <option value="Ruby">Ruby</option>
+                            <option value="C">C</option>
+                            <option value="Rust">Rust</option>
+                            <option value="Golang">Golang</option>
+                        </select>
+                        <!-- Level -->
+                        <fieldset>
+                            <legend>Level</legend>
+                            <input
+                                x-bind:id="'inputProgrammingLanguageLevelTrainee' + idx"
+                                type="radio"
+                                x-model="programmingLanguage.level"
+                                x-bind:name="'inputProgrammingLanguageLevel' + idx"
+                                value="Trainee"
+                            />
+                            <label x-bind:for="'inputProgrammingLanguageLevelTrainee' + idx">Trainee</label>
+                            <input
+                                x-bind:id="'inputProgrammingLanguageLevelJunior' + idx"
+                                type="radio"
+                                x-model="programmingLanguage.level"
+                                x-bind:name="'inputProgrammingLanguageLevel' + idx"
+                                value="Junior"
+                            />
+                            <label x-bind:for="'inputProgrammingLanguageLevelJunior' + idx">Junior</label>
+                            <input
+                                x-bind:id="'inputProgrammingLanguageLevelMiddle' + idx"
+                                type="radio"
+                                x-model="programmingLanguage.level"
+                                x-bind:name="'inputProgrammingLanguageLevel' + idx"
+                                value="Middle"
+                            />
+                            <label x-bind:for="'inputProgrammingLanguageLevelMiddle' + idx">Middle</label>
+                            <input
+                                x-bind:id="'inputProgrammingLanguageLevelSenior' + idx"
+                                type="radio"
+                                x-model="programmingLanguage.level"
+                                x-bind:name="'inputProgrammingLanguageLevel' + idx"
+                                value="Senior"
+                            />
+                            <label x-bind:for="'inputProgrammingLanguageLevelSenior' + idx">Senior</label>
+                        </fieldset>
+                        <div>
+                            <button x-on:click="programmingLanguages.splice(idx, 1)">Remove</button>
+                        </div>
                     </div>
+                </template>
+                <div>
+                    <button x-on:click="programmingLanguages.push({ name: '', level: '' })">Add</button>
                 </div>
-            </template>
-            <div>
-                <button x-on:click="programmingLanguages.push({ name: '', level: '' })">Add</button>
-            </div>
+            </section>
+
             <button type="submit">Submit</button>
         </form>
     </body>
