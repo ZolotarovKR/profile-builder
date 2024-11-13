@@ -3,7 +3,7 @@ document.addEventListener('alpine:init', () => {
         personalDetails: {
             fullName: '',
             gender: '',
-            age: 18,
+            age: '',
             citizenship: '',
             maritalStatus: '',
         },
@@ -28,6 +28,7 @@ document.addEventListener('alpine:init', () => {
             data.workExperience = Alpine.raw(this.workExperience);
             data.languages = Alpine.raw(this.languages);
             data.programmingLanguages = Alpine.raw(this.programmingLanguages);
+            data.personalDetails.age = Number(data.personalDetails.age);
             let resp = await fetch('/api/cv', {
                 method: 'POST',
                 headers: {
