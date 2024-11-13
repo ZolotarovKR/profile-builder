@@ -87,10 +87,15 @@
             <h2>Languages</h2>
             <template x-for="(language, idx) in languages">
                 <div>
-                    <div>
-                        <label x-bind:for="'inputLanguageName' + idx">Name:</label>
-                        <input x-bind:id="'inputLanguageName' + idx" type="text" x-model="language.name" />
-                    </div>
+                    <!-- Name -->
+                    <label for="inputLanguageName">Select name:</label>
+                    <select x-model="language.name" id="inputLanguageName">
+                        <option value="" selected>---</option>
+                        <option value="Ukrainian">Ukrainian</option>
+                        <option value="English">English</option>
+                        <option value="German">German</option>
+                        <option value="French">French</option>
+                    </select>
                     <!-- Level -->
                     <fieldset>
                         <legend>Level</legend>
@@ -163,10 +168,19 @@
             <h2>Programming Languages</h2>
             <template x-for="(programmingLanguage, idx) in programmingLanguages">
                 <div>
-                    <div>
-                        <label x-bind:for="'inputProgrammingLanguageName' + idx">Name:</label>
-                        <input x-bind:id="'inputProgrammingLanguageName' + idx" type="text" x-model="programmingLanguage.name" />
-                    </div>
+                    <!-- Name -->
+                    <label for="inputProgrammingLanguageName">Select name:</label>
+                    <select x-model="programmingLanguage.name" id="inputProgrammingLanguageName">
+                        <option value="" selected>---</option>
+                        <option value="C++">C++</option>
+                        <option value="C#">C#</option>
+                        <option value="Java">Java</option>
+                        <option value="Python">Python</option>
+                        <option value="Ruby">Ruby</option>
+                        <option value="C">C</option>
+                        <option value="Rust">Rust</option>
+                        <option value="Golang">Golang</option>
+                    </select>
                     <!-- Level -->
                     <fieldset>
                         <legend>Level</legend>
