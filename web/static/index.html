@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Home : Profile Builder</title>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    </head>
+    <body x-data="{ previews: [] }" x-init="previews = await (await fetch('/api/previews')).json()">
+        <h1>Home</h1>
+        <template x-for="preview in previews">
+            <div x-on:click="window.location.href = '/cv/' + preview.id">
+                <h2 x-text="preview.personalDetails.fullName"></h2>
+                <div>
+                    <span x-text="preview.personalDetails.age + ' years'"></span>
+                    <span x-text="preview.personalDetails.gender"></span>
+                    <span x-text="preview.personalDetails.citizenship"></span>
+                    <span x-text="preview.personalDetails.maritalStatus"></span>
+                </div>
+                <div>
+                    <template x-for="language in preview.languages">
+                        <span x-text="language.name + ' ' + language.level"></span>
+                    </template>
+                </div>
+                <div>
+                    <template x-for="programmingLanguage in preview.programmingLanguages">
+                        <span x-text="programmingLanguage.name + ' ' + programmingLanguage.level"></span>
+                    </template>
+                </div>
+            </div>
+        </template>
+        <div>
+            <button x-on:click="window.location.href = '/create'">Create CV</button>
+        </div>
+    </body>
+</html>
