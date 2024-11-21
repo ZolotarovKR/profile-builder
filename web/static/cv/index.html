@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CV | Profile Builder</title>
+        <script defer src="script.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    </head>
+    <body x-data="cv" x-init="fetchPersonalDetails()">
+        <h1 x-text="personalDetails.fullName"></h1>
+        <div style="border: 2px solid black; margin: 1rem">
+            <div x-on:click="section = 'personalDetails'; fetchPersonalDetails()">Personal Details</div>
+            <div x-on:click="section = 'contacts'; fetchContacts()">Contacts</div>
+            <div x-on:click="section = 'education'; fetchEducation()">Education</div>
+            <div x-on:click="section = 'workExperience'; fetchWorkExperience()">Work Experience</div>
+            <div x-on:click="section = 'languages'; fetchLanguages()">Languages</div>
+            <div x-on:click="section = 'programmingLanguages'; fetchProgrammingLanguages()">Programming Languages</div>
+        </div>
+        <div x-show="section === 'personalDetails'">
+            <h2>Personal Details</h2>
+            <div x-text="'Gender: ' + personalDetails.gender"></div>
+            <div x-text="'Age: ' + personalDetails.age"></div>
+            <div x-text="'Citizenship: ' + personalDetails.citizenship"></div>
+            <div x-text="'Marital Status: ' + personalDetails.maritalStatus"></div>
+        </div>
+        <div x-show="section === 'contacts'">
+            <h2>Contacts</h2>
+            <div>Emails:</div>
+            <ul>
+                <template x-for="email in contacts.emails">
+                    <li x-text="email"></li>
+                </template>
+            </ul>
+            <div>Phone Numbers:</div>
+            <ul>
+                <template x-for="phoneNumber in contacts.phoneNumbers">
+                    <li x-text="phoneNumber"></li>
+                </template>
+            </ul>
+            <div x-text="'Location: ' + contacts.location.country +  ', ' + contacts.location.city"></div>
+        </div>
+        <div x-show="section === 'education'">
+            <h2>Education</h2>
+            <template x-for="course in education">
+                <div>
+                    <h3 x-text="course.name"></h3>
+                    <div x-text="course.institute"></div>
+                    <div x-text="course.period.start + ' - ' + course.period.end"></div>
+                </div>
+            </template>
+        </div>
+        <div x-show="section === 'workExperience'">
+            <h2>Work Experience</h2>
+            <template x-for="jobRecord in workExperience">
+                <div>
+                    <h3 x-text="jobRecord.companyName"></h3>
+                    <div x-text="jobRecord.location.country +  ', ' + jobRecord.location.city"></div>
+                    <div x-text="jobRecord.position"></div>
+                    <div x-text="jobRecord.period.start + ' - ' + jobRecord.period.end"></div>
+                    <div x-text="jobRecord.achievements"></div>
+                </div>
+            </template>
+        </div>
+        <div x-show="section === 'languages'">
+            <h2>Languages</h2>
+            <ul>
+                <template x-for="language in languages">
+                    <div x-text="language.name + ' - ' + language.level"></div>
+                </template>
+            </ul>
+        </div>
+        <div x-show="section === 'programmingLanguages'">
+            <h2>Programming Languages</h2>
+            <ul>
+                <template x-for="programmingLanguage in programmingLanguages">
+                    <div x-text="programmingLanguage.name + ' - ' + programmingLanguage.level"></div>
+                </template>
+            </ul>
+        </div>
+    </body>
+</html>
