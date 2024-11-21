@@ -24,63 +24,41 @@ document.addEventListener('alpine:init', () => {
         languages: [],
         programmingLanguages: [],
 
+        async init() {
+            this.extractId();
+            await this.fetchSection('personalDetails');
+        },
         extractId() {
             let params = new URLSearchParams(window.location.search);
             this.id = Number(params.get('id'));
         },
-        async fetchPersonalDetails() {
-            if (this.relevantSections.includes('personalDetails')) {
+        async fetchSection(s) {
+            if (this.relevantSections.includes(s)) {
                 return;
             }
-            let resp = await fetch('/api/personal-details/' + this.id);
-            console.log(resp.status);
-            this.personalDetails = await resp.json();
-            this.relevantSections.push('personalDetails');
-        },
-        async fetchContacts() {
-            if (this.relevantSections.includes('contacts')) {
-                return;
+            switch (s) {
+                case 'personalDetails':
+                    this.personalDetails = await (await fetch('/api/personal-details/' + this.id)).json();
+                    break;
+                case 'contacts':
+                    this.contacts = await (await fetch('/api/contacts/' + this.id)).json();
+                    break;
+                case 'education':
+                    this.education = await (await fetch('/api/education/' + this.id)).json();
+                    break;
+                case 'workExperience':
+                    this.workExperience = await (await fetch('/api/work-experience/' + this.id)).json();
+                    break;
+                case 'languages':
+                    this.languages = await (await fetch('/api/languages/' + this.id)).json();
+                    break;
+                case 'programmingLanguages':
+                    this.programmingLanguages = await (await fetch('/api/programming-languages/' + this.id)).json();
+                    break;
+                default:
+                    return;
             }
-            let resp = await fetch('/api/contacts/' + this.id);
-            console.log(resp.status);
-            this.contacts = await resp.json();
-            this.relevantSections.push('contacts');
-        },
-        async fetchEducation() {
-            if (this.relevantSections.includes('education')) {
-                return;
-            }
-            let resp = await fetch('/api/education/' + this.id);
-            console.log(resp.status);
-            this.education = await resp.json();
-            this.relevantSections.push('education');
-        },
-        async fetchWorkExperience() {
-            if (this.relevantSections.includes('workExperience')) {
-                return;
-            }
-            let resp = await fetch('/api/work-experience/' + this.id);
-            console.log(resp.status);
-            this.workExperience = await resp.json();
-            this.relevantSections.push('workExperience');
-        },
-        async fetchLanguages() {
-            if (this.relevantSections.includes('languages')) {
-                return;
-            }
-            let resp = await fetch('/api/languages/' + this.id);
-            console.log(resp.status);
-            this.languages = await resp.json();
-            this.relevantSections.push('languages');
-        },
-        async fetchProgrammingLanguages() {
-            if (this.relevantSections.includes('programmingLanguages')) {
-                return;
-            }
-            let resp = await fetch('/api/programming-languages/' + this.id);
-            console.log(resp.status);
-            this.programmingLanguages = await resp.json();
-            this.relevantSections.push('programmingLanguages');
+            this.relevantSections.push(s);
         },
     }));
 });

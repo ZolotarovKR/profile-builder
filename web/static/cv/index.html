@@ -7,15 +7,15 @@
         <script defer src="script.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </head>
-    <body x-data="cv" x-init="extractId(); fetchPersonalDetails()">
+    <body x-data="cv">
         <h1 x-text="personalDetails.fullName"></h1>
         <div style="border: 2px solid black; margin: 1rem">
-            <div x-on:click="section = 'personalDetails'; fetchPersonalDetails()">Personal Details</div>
-            <div x-on:click="section = 'contacts'; fetchContacts()">Contacts</div>
-            <div x-on:click="section = 'education'; fetchEducation()">Education</div>
-            <div x-on:click="section = 'workExperience'; fetchWorkExperience()">Work Experience</div>
-            <div x-on:click="section = 'languages'; fetchLanguages()">Languages</div>
-            <div x-on:click="section = 'programmingLanguages'; fetchProgrammingLanguages()">Programming Languages</div>
+            <div x-on:click="section = 'personalDetails'; fetchSection('personalDetails')">Personal Details</div>
+            <div x-on:click="section = 'contacts'; fetchSection('contacts')">Contacts</div>
+            <div x-on:click="section = 'education'; fetchSection('education')">Education</div>
+            <div x-on:click="section = 'workExperience'; fetchSection('workExperience')">Work Experience</div>
+            <div x-on:click="section = 'languages'; fetchSection('languages')">Languages</div>
+            <div x-on:click="section = 'programmingLanguages'; fetchSection('programmingLanguages')">Programming Languages</div>
         </div>
         <div x-show="section === 'personalDetails'">
             <h2>Personal Details</h2>
