@@ -7,7 +7,7 @@
         <script defer src="script.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </head>
-    <body x-data="cv" x-init="fetchPersonalDetails()">
+    <body x-data="cv" x-init="extractId(); fetchPersonalDetails()">
         <h1 x-text="personalDetails.fullName"></h1>
         <div style="border: 2px solid black; margin: 1rem">
             <div x-on:click="section = 'personalDetails'; fetchPersonalDetails()">Personal Details</div>

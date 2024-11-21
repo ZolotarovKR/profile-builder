@@ -9,7 +9,7 @@
     <body x-data="{ previews: [] }" x-init="previews = await (await fetch('/api/previews')).json()">
         <h1>Home</h1>
         <template x-for="preview in previews">
-            <div x-on:click="window.location.href = '/cv/' + preview.id">
+            <div x-on:click="window.location.href = '/cv?id=' + preview.id">
                 <h2 x-text="preview.personalDetails.fullName"></h2>
                 <div>
                     <span x-text="preview.personalDetails.age + ' years'"></span>
