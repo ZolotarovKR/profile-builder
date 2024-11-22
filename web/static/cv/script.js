@@ -1,8 +1,9 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('cv', () => ({
         id: 0,
-        section: 'personalDetails',
+        currentSection: 'personalDetails',
         relevantSections: [],
+        inEditMode: false,
 
         personalDetails: {
             fullName: '',
@@ -23,6 +24,26 @@ document.addEventListener('alpine:init', () => {
         workExperience: [],
         languages: [],
         programmingLanguages: [],
+
+        pd: {
+            fullName: '',
+            gender: '',
+            age: '',
+            citizenship: '',
+            maritalStatus: '',
+        },
+        c: {
+            emails: [],
+            phoneNumbers: [],
+            location: {
+                country: '',
+                city: '',
+            },
+        },
+        e: [],
+        we: [],
+        l: [],
+        pl: [],
 
         async init() {
             this.extractId();
@@ -59,6 +80,50 @@ document.addEventListener('alpine:init', () => {
                     return;
             }
             this.relevantSections.push(s);
+        },
+        enterEditMode(s) {
+            switch (s) {
+                case 'personalDetails':
+                    this.pd = structuredClone(Alpine.raw(this.personalDetails));
+                    break;
+                case 'contacts':
+                    this.c = structuredClone(Alpine.raw(this.contacts));
+                    break;
+                default:
+                    return;
+            }
+            this.inEditMode = true;
+        },
+        async saveChanges(s) {
+            let url;
+            let data;
+            switch (s) {
+                case 'personalDetails':
+                    url = '/api/personal-details/' + this.id;
+                    data = structuredClone(Alpine.raw(this.pd));
+                    data.age = Number(data.age);
+                    break;
+                case 'contacts':
+                    url = '/api/contacts/' + this.id;
+                    data = structuredClone(Alpine.raw(this.c));
+                    break;
+                default:
+                    return;
+            }
+            let resp = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            if (resp.status !== 200) {
+                alert(await resp.text());
+                return;
+            }
+            this.inEditMode = false;
+            this.relevantSections.splice(this.relevantSections.indexOf(s), 1);
+            this.fetchSection(s);
         },
     }));
 });

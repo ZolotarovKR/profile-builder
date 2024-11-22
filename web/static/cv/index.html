@@ -10,37 +10,126 @@
     <body x-data="cv">
         <h1 x-text="personalDetails.fullName"></h1>
         <div style="border: 2px solid black; margin: 1rem">
-            <div x-on:click="section = 'personalDetails'; fetchSection('personalDetails')">Personal Details</div>
-            <div x-on:click="section = 'contacts'; fetchSection('contacts')">Contacts</div>
-            <div x-on:click="section = 'education'; fetchSection('education')">Education</div>
-            <div x-on:click="section = 'workExperience'; fetchSection('workExperience')">Work Experience</div>
-            <div x-on:click="section = 'languages'; fetchSection('languages')">Languages</div>
-            <div x-on:click="section = 'programmingLanguages'; fetchSection('programmingLanguages')">Programming Languages</div>
+            <div x-on:click="currentSection = 'personalDetails'; fetchSection('personalDetails')">Personal Details</div>
+            <div x-on:click="currentSection = 'contacts'; fetchSection('contacts')">Contacts</div>
+            <div x-on:click="currentSection = 'education'; fetchSection('education')">Education</div>
+            <div x-on:click="currentSection = 'workExperience'; fetchSection('workExperience')">Work Experience</div>
+            <div x-on:click="currentSection = 'languages'; fetchSection('languages')">Languages</div>
+            <div x-on:click="currentSection = 'programmingLanguages'; fetchSection('programmingLanguages')">Programming Languages</div>
         </div>
-        <div x-show="section === 'personalDetails'">
+        <section x-show="currentSection === 'personalDetails'">
             <h2>Personal Details</h2>
-            <div x-text="'Gender: ' + personalDetails.gender"></div>
-            <div x-text="'Age: ' + personalDetails.age"></div>
-            <div x-text="'Citizenship: ' + personalDetails.citizenship"></div>
-            <div x-text="'Marital Status: ' + personalDetails.maritalStatus"></div>
-        </div>
-        <div x-show="section === 'contacts'">
-            <h2>Contacts</h2>
-            <div>Emails:</div>
-            <ul>
-                <template x-for="email in contacts.emails">
-                    <li x-text="email"></li>
+            <div x-show="!inEditMode">
+                <div x-text="'Gender: ' + personalDetails.gender"></div>
+                <div x-text="'Age: ' + personalDetails.age"></div>
+                <div x-text="'Citizenship: ' + personalDetails.citizenship"></div>
+                <div x-text="'Marital Status: ' + personalDetails.maritalStatus"></div>
+                <div>
+                    <button x-on:click="enterEditMode('personalDetails')">Edit</button>
+                </div>
+            </div>
+            <div x-show="inEditMode">
+                <div>
+                    <label for="inputFullName">Full Name:</label>
+                    <input id="inputFullName" type="text" x-model="pd.fullName" />
+                </div>
+                <fieldset>
+                    <legend>Gender</legend>
+                    <div>
+                        <input id="inputGenderMale" type="radio" x-model="pd.gender" value="Male" />
+                        <label for="inputGenderMale">Male</label>
+                    </div>
+                    <div>
+                        <input id="inputGenderFemale" type="radio" x-model="pd.gender" value="Female" />
+                        <label for="inputGenderFemale">Female</label>
+                    </div>
+                    <div>
+                        <input id="inputGenderOther" type="radio" x-model="pd.gender" value="Other" />
+                        <label for="inputGenderOther">Other</label>
+                    </div>
+                </fieldset>
+                <div>
+                    <label for="inputAge">Age:</label>
+                    <input id="inputAge" type="text" x-model="pd.age" />
+                </div>
+                <div>
+                    <label for="inputCitizenship">Citizenship:</label>
+                    <input id="inputCitizenship" type="text" x-model="pd.citizenship" />
+                </div>
+                <fieldset>
+                    <legend>Marital Status</legend>
+                    <div>
+                        <input id="inputMaritalStatusSingle" type="radio" x-model="pd.maritalStatus" value="Single" />
+                        <label for="inputMaritalStatusSingle">Single</label>
+                    </div>
+                    <div>
+                        <input id="inputMaritalStatusMarried" type="radio" x-model="pd.maritalStatus" value="Married" />
+                        <label for="inputMaritalStatusMarried">Married</label>
+                    </div>
+                </fieldset>
+                <div>
+                    <button x-on:click="saveChanges('personalDetails')">Save</button>
+                    <button x-on:click="inEditMode = false">Cancel</button>
+                </div>
+            </div>
+        </section>
+        <section x-show="currentSection === 'contacts'">
+            <div x-show="!inEditMode">
+                <h2>Contacts</h2>
+                <div>Emails:</div>
+                <ul>
+                    <template x-for="email in contacts.emails">
+                        <li x-text="email"></li>
+                    </template>
+                </ul>
+                <div>Phone Numbers:</div>
+                <ul>
+                    <template x-for="phoneNumber in contacts.phoneNumbers">
+                        <li x-text="phoneNumber"></li>
+                    </template>
+                </ul>
+                <div x-text="'Location: ' + contacts.location.country +  ', ' + contacts.location.city"></div>
+                <div>
+                    <button x-on:click="enterEditMode('contacts')">Edit</button>
+                </div>
+            </div>
+            <div x-show="inEditMode">
+                <h3>Emails</h3>
+                <template x-for="(email, idx) in c.emails">
+                    <div>
+                        <input type="email" x-model="c.emails[idx]" />
+                        <button type="button" x-on:click="c.emails.splice(idx, 1)">Remove</button>
+                    </div>
                 </template>
-            </ul>
-            <div>Phone Numbers:</div>
-            <ul>
-                <template x-for="phoneNumber in contacts.phoneNumbers">
-                    <li x-text="phoneNumber"></li>
+                <div>
+                    <button type="button" x-on:click="c.emails.push('')">Add</button>
+                </div>
+                <h3>Phone Numbers</h3>
+                <template x-for="(phoneNumber, idx) in c.phoneNumbers">
+                    <div>
+                        <input type="text" x-model="c.phoneNumbers[idx]" />
+                        <button type="button" x-on:click="c.phoneNumbers.splice(idx, 1)">Remove</button>
+                    </div>
                 </template>
-            </ul>
-            <div x-text="'Location: ' + contacts.location.country +  ', ' + contacts.location.city"></div>
-        </div>
-        <div x-show="section === 'education'">
+                <div>
+                    <button type="button" x-on:click="c.phoneNumbers.push('')">Add</button>
+                </div>
+                <h3>Location</h3>
+                <div>
+                    <label for="inputLocationCountry">Country:</label>
+                    <input id="inputLocationCountry" type="text" x-model="c.location.country" />
+                </div>
+                <div>
+                    <label for="inputLocationCity">City:</label>
+                    <input id="inputLocationCity" type="text" x-model="c.location.city" />
+                </div>
+                <div>
+                    <button x-on:click="saveChanges('contacts')">Save</button>
+                    <button x-on:click="inEditMode = false">Cancel</button>
+                </div>
+            </div>
+        </section>
+        <div x-show="currentSection === 'education'">
             <h2>Education</h2>
             <template x-for="course in education">
                 <div>
@@ -50,7 +139,7 @@
                 </div>
             </template>
         </div>
-        <div x-show="section === 'workExperience'">
+        <div x-show="currentSection === 'workExperience'">
             <h2>Work Experience</h2>
             <template x-for="jobRecord in workExperience">
                 <div>
@@ -62,7 +151,7 @@
                 </div>
             </template>
         </div>
-        <div x-show="section === 'languages'">
+        <div x-show="currentSection === 'languages'">
             <h2>Languages</h2>
             <ul>
                 <template x-for="language in languages">
@@ -70,7 +159,7 @@
                 </template>
             </ul>
         </div>
-        <div x-show="section === 'programmingLanguages'">
+        <div x-show="currentSection === 'programmingLanguages'">
             <h2>Programming Languages</h2>
             <ul>
                 <template x-for="programmingLanguage in programmingLanguages">
