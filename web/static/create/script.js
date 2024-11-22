@@ -1,33 +1,35 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('form', () => ({
+        activeSection: 'personalDetails',
+
         personalDetails: {
             fullName: '',
-            gender: '',
+            gender: 'Male',
             age: '',
-            citizenship: '',
-            maritalStatus: '',
+            citizenship: 'Ukrainian',
+            maritalStatus: 'Single',
         },
         contacts: {
-            emails: [],
-            phoneNumbers: [],
+            emails: [''],
+            phoneNumbers: [''],
             location: {
-                country: '',
-                city: '',
+                country: 'Ukraine',
+                city: 'Kyiv',
             },
         },
-        education: [],
-        workExperience: [],
-        languages: [],
-        programmingLanguages: [],
+        education: [{ name: '', institute: '', period: { start: '', end: '' } }],
+        workExperience: [{ companyName: '', location: { country: 'Ukraine', city: 'Kyiv' }, position: '', period: { start: '', end: '' } }],
+        languages: [{ name: 'Ukrainian', level: 'Native' }],
+        programmingLanguages: [{ name: 'C++', level: 'Trainee' }],
 
         async submit() {
             const data = {};
-            data.personalDetails = Alpine.raw(this.personalDetails);
-            data.contacts = Alpine.raw(this.contacts);
-            data.education = Alpine.raw(this.education);
-            data.workExperience = Alpine.raw(this.workExperience);
-            data.languages = Alpine.raw(this.languages);
-            data.programmingLanguages = Alpine.raw(this.programmingLanguages);
+            data.personalDetails = structuredClone(Alpine.raw(this.personalDetails));
+            data.contacts = structuredClone(Alpine.raw(this.contacts));
+            data.education = structuredClone(Alpine.raw(this.education));
+            data.workExperience = structuredClone(Alpine.raw(this.workExperience));
+            data.languages = structuredClone(Alpine.raw(this.languages));
+            data.programmingLanguages = structuredClone(Alpine.raw(this.programmingLanguages));
             data.personalDetails.age = Number(data.personalDetails.age);
             let resp = await fetch('/api/cv', {
                 method: 'POST',
