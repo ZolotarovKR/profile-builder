@@ -10,7 +10,7 @@
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </head>
     <body>
-        <form class="container p-5" x-data="form" x-on:submit.prevent="submit()">
+        <form class="container-md border p-5" x-data="form" x-on:submit.prevent="submit()">
             <section>
                 <h2>Personal Details</h2>
                 <div class="mb-3">
@@ -53,7 +53,9 @@
                         <button class="btn btn-outline-danger" type="button" x-on:click="contacts.emails.splice(idx, 1)">Delete</button>
                     </div>
                 </template>
-                <button type="button" class="btn btn-outline-secondary mb-3" x-on:click="contacts.emails.push('')">Add</button>
+                <div class="mb-3">
+                    <button type="button" class="btn btn-outline-secondary" x-on:click="contacts.emails.push('')">Add</button>
+                </div>
                 <h3>Phone Numbers</h3>
                 <template x-for="(phoneNumber, idx) in contacts.phoneNumbers">
                     <div class="input-group mb-3">
@@ -61,7 +63,9 @@
                         <button class="btn btn-outline-danger" type="button" x-on:click="contacts.phoneNumbers.splice(idx, 1)">Delete</button>
                     </div>
                 </template>
-                <button type="button" class="btn btn-outline-secondary mb-3" x-on:click="contacts.phoneNumbers.push('')">Add</button>
+                <div class="mb-3">
+                    <button type="button" class="btn btn-outline-secondary" x-on:click="contacts.phoneNumbers.push('')">Add</button>
+                </div>
                 <h3>Location</h3>
                 <div class="mb-3">
                     <label for="country" class="form-label">Country</label>
@@ -111,13 +115,15 @@
                         <button class="btn btn-outline-danger" type="button" x-on:click="education.splice(idx, 1)">Delete</button>
                     </div>
                 </template>
-                <button
-                    type="button"
-                    class="btn btn-outline-secondary mb-3"
-                    x-on:click="education.push({ name: '', institute: '', period: { start: '', end: '' } })"
-                >
-                    Add
-                </button>
+                <div class="mb-3">
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        x-on:click="education.push({ name: '', institute: '', period: { start: '', end: '' } })"
+                    >
+                        Add
+                    </button>
+                </div>
             </section>
             <section>
                 <h2>Work Experience</h2>
@@ -194,13 +200,15 @@
                         <button class="btn btn-outline-danger" type="button" x-on:click="workExperience.splice(idx, 1)">Delete</button>
                     </div>
                 </template>
-                <button
-                    type="button"
-                    class="btn btn-outline-secondary mb-3"
-                    x-on:click="workExperience.push({ companyName: '', location: { country: 'Ukraine', city: 'Kyiv' }, position: '', period: { start: '', end: '' }, achievements: '' })"
-                >
-                    Add
-                </button>
+                <div class="mb-3">
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        x-on:click="workExperience.push({ companyName: '', location: { country: 'Ukraine', city: 'Kyiv' }, position: '', period: { start: '', end: '' }, achievements: '' })"
+                    >
+                        Add
+                    </button>
+                </div>
             </section>
             <section>
                 <h2>Languages</h2>
@@ -223,7 +231,9 @@
                         <button class="btn btn-outline-danger" type="button" x-on:click="languages.splice(idx, 1)">Delete</button>
                     </div>
                 </template>
-                <button type="button" class="btn btn-outline-secondary mb-3" x-on:click="languages.push({ name: 'Ukrainian', level: 'Native' })">Add</button>
+                <div class="mb-3">
+                    <button type="button" class="btn btn-outline-secondary" x-on:click="languages.push({ name: 'Ukrainian', level: 'Native' })">Add</button>
+                </div>
             </section>
             <section>
                 <h2>Programming Languages</h2>
@@ -248,10 +258,14 @@
                         <button class="btn btn-outline-danger" type="button" x-on:click="programmingLanguages.splice(idx, 1)">Delete</button>
                     </div>
                 </template>
-                <button type="button" class="btn btn-outline-secondary mb-3" x-on:click="programmingLanguages.push({ name: 'C++', level: 'Trainee' })">
-                    Add
-                </button>
-                <button class="btn btn-success" type="submit">Submit</button>
+                <div class="mb-3">
+                    <button type="button" class="btn btn-outline-secondary" x-on:click="programmingLanguages.push({ name: 'C++', level: 'Trainee' })">
+                        Add
+                    </button>
+                </div>
+                <div class="d-grid mb-3">
+                    <button class="btn btn-success" type="submit">Submit</button>
+                </div>
             </section>
         </form>
     </body>
