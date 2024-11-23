@@ -11,7 +11,7 @@
     </head>
     <body>
         <form class="container p-5" x-data="form" x-on:submit.prevent="submit()">
-            <section x-show="activeSection === 'personalDetails'">
+            <section>
                 <h2>Personal Details</h2>
                 <div class="mb-3">
                     <label for="fullName" class="form-label">Full Name</label>
@@ -43,12 +43,8 @@
                         <option value="Married">Married</option>
                     </select>
                 </div>
-                <div class="d-grid gap-2 d-md-block">
-                    <button type="button" class="btn btn-primary" x-on:click="activeSection = 'languagesAndProgrammingLanguages'">Previous</button>
-                    <button type="button" class="btn btn-primary" x-on:click="activeSection = 'contacts'">Next</button>
-                </div>
             </section>
-            <section x-show="activeSection === 'contacts'">
+            <section>
                 <h2>Contacts</h2>
                 <h3>Emails</h3>
                 <template x-for="(email, idx) in contacts.emails">
@@ -57,7 +53,7 @@
                         <button class="btn btn-outline-danger" type="button" x-on:click="contacts.emails.splice(idx, 1)">Delete</button>
                     </div>
                 </template>
-                <button type="button" class="btn btn-outline-info mb-3" x-on:click="contacts.emails.push('')">Add</button>
+                <button type="button" class="btn btn-outline-secondary mb-3" x-on:click="contacts.emails.push('')">Add</button>
                 <h3>Phone Numbers</h3>
                 <template x-for="(phoneNumber, idx) in contacts.phoneNumbers">
                     <div class="input-group mb-3">
@@ -65,7 +61,7 @@
                         <button class="btn btn-outline-danger" type="button" x-on:click="contacts.phoneNumbers.splice(idx, 1)">Delete</button>
                     </div>
                 </template>
-                <button type="button" class="btn btn-outline-info mb-3" x-on:click="contacts.phoneNumbers.push('')">Add</button>
+                <button type="button" class="btn btn-outline-secondary mb-3" x-on:click="contacts.phoneNumbers.push('')">Add</button>
                 <h3>Location</h3>
                 <div class="mb-3">
                     <label for="country" class="form-label">Country</label>
@@ -85,12 +81,8 @@
                         <option value="Hamburg">Hamburg</option>
                     </select>
                 </div>
-                <div class="d-grid gap-2 d-md-block">
-                    <button type="button" class="btn btn-primary" x-on:click="activeSection = 'personalDetails'">Previous</button>
-                    <button type="button" class="btn btn-primary" x-on:click="activeSection = 'education'">Next</button>
-                </div>
             </section>
-            <section x-show="activeSection === 'education'">
+            <section>
                 <h2>Education</h2>
                 <template x-for="(course, idx) in education">
                     <div class="border rounded p-4 mb-3">
@@ -121,17 +113,13 @@
                 </template>
                 <button
                     type="button"
-                    class="btn btn-outline-info mb-3"
+                    class="btn btn-outline-secondary mb-3"
                     x-on:click="education.push({ name: '', institute: '', period: { start: '', end: '' } })"
                 >
                     Add
                 </button>
-                <div class="d-grid gap-2 d-md-block">
-                    <button type="button" class="btn btn-primary" x-on:click="activeSection = 'contacts'">Previous</button>
-                    <button type="button" class="btn btn-primary" x-on:click="activeSection = 'workExperience'">Next</button>
-                </div>
             </section>
-            <section x-show="activeSection === 'workExperience'">
+            <section>
                 <h2>Work Experience</h2>
                 <template x-for="(jobRecord, idx) in workExperience">
                     <div class="border rounded p-4 mb-3">
@@ -208,17 +196,13 @@
                 </template>
                 <button
                     type="button"
-                    class="btn btn-outline-info mb-3"
+                    class="btn btn-outline-secondary mb-3"
                     x-on:click="workExperience.push({ companyName: '', location: { country: 'Ukraine', city: 'Kyiv' }, position: '', period: { start: '', end: '' }, achievements: '' })"
                 >
                     Add
                 </button>
-                <div class="d-grid gap-2 d-md-block">
-                    <button type="button" class="btn btn-primary" x-on:click="activeSection = 'education'">Previous</button>
-                    <button type="button" class="btn btn-primary" x-on:click="activeSection = 'languagesAndProgrammingLanguages'">Next</button>
-                </div>
             </section>
-            <section x-show="activeSection === 'languagesAndProgrammingLanguages'">
+            <section>
                 <h2>Languages</h2>
                 <template x-for="(language, idx) in languages">
                     <div class="input-group mb-3">
@@ -239,7 +223,9 @@
                         <button class="btn btn-outline-danger" type="button" x-on:click="languages.splice(idx, 1)">Delete</button>
                     </div>
                 </template>
-                <button type="button" class="btn btn-outline-info mb-3" x-on:click="languages.push({ name: 'Ukrainian', level: 'Native' })">Add</button>
+                <button type="button" class="btn btn-outline-secondary mb-3" x-on:click="languages.push({ name: 'Ukrainian', level: 'Native' })">Add</button>
+            </section>
+            <section>
                 <h2>Programming Languages</h2>
                 <template x-for="(programmingLanguage, idx) in programmingLanguages">
                     <div class="input-group mb-3">
@@ -262,11 +248,9 @@
                         <button class="btn btn-outline-danger" type="button" x-on:click="programmingLanguages.splice(idx, 1)">Delete</button>
                     </div>
                 </template>
-                <button type="button" class="btn btn-outline-info mb-3" x-on:click="programmingLanguages.push({ name: 'C++', level: 'Trainee' })">Add</button>
-                <div class="d-grid gap-2 d-md-block mb-3">
-                    <button type="button" class="btn btn-primary" x-on:click="activeSection = 'workExperience'">Previous</button>
-                    <button type="button" class="btn btn-primary" x-on:click="activeSection = 'personalDetails'">Next</button>
-                </div>
+                <button type="button" class="btn btn-outline-secondary mb-3" x-on:click="programmingLanguages.push({ name: 'C++', level: 'Trainee' })">
+                    Add
+                </button>
                 <button class="btn btn-success" type="submit">Submit</button>
             </section>
         </form>

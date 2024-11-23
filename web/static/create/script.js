@@ -1,7 +1,5 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('form', () => ({
-        activeSection: 'personalDetails',
-
         personalDetails: {
             fullName: '',
             gender: 'Male',
