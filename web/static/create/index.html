@@ -10,9 +10,40 @@
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </head>
     <body>
+        <nav class="navbar navbar-expand-xl bg-body-tertiary" data-bs-theme="dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">Profile Builder</a>
+                <button class="navbar-toggler d-xl-none" type="button" data-bs-toggle="collapse" data-bs-target="#sections">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="sections">
+                    <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#personal-details">Personal Details</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contacts">Contacts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#education">Education</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#work-experience">Work Experience</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#languages">Languages</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#programming-languages">Programming Languages</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
         <form class="container-md border p-5" x-data="form" x-on:submit.prevent="submit()">
             <section>
-                <h2>Personal Details</h2>
+                <h2 id="personal-details">Personal Details</h2>
                 <div class="mb-3">
                     <label for="fullName" class="form-label">Full Name</label>
                     <input type="text" class="form-control" id="fullName" placeholder="John Doe" x-model="personalDetails.fullName" />
@@ -45,7 +76,7 @@
                 </div>
             </section>
             <section>
-                <h2>Contacts</h2>
+                <h2 id="contacts">Contacts</h2>
                 <h3>Emails</h3>
                 <template x-for="(email, idx) in contacts.emails">
                     <div class="input-group mb-3">
@@ -87,7 +118,7 @@
                 </div>
             </section>
             <section>
-                <h2>Education</h2>
+                <h2 id="education">Education</h2>
                 <template x-for="(course, idx) in education">
                     <div class="border rounded p-4 mb-3">
                         <div class="mb-3">
@@ -126,7 +157,7 @@
                 </div>
             </section>
             <section>
-                <h2>Work Experience</h2>
+                <h2 id="work-experience">Work Experience</h2>
                 <template x-for="(jobRecord, idx) in workExperience">
                     <div class="border rounded p-4 mb-3">
                         <div class="mb-3">
@@ -211,7 +242,7 @@
                 </div>
             </section>
             <section>
-                <h2>Languages</h2>
+                <h2 id="languages">Languages</h2>
                 <template x-for="(language, idx) in languages">
                     <div class="input-group mb-3">
                         <select class="form-select" x-model="languages[idx].name">
@@ -236,7 +267,7 @@
                 </div>
             </section>
             <section>
-                <h2>Programming Languages</h2>
+                <h2 id="programming-languages">Programming Languages</h2>
                 <template x-for="(programmingLanguage, idx) in programmingLanguages">
                     <div class="input-group mb-3">
                         <select class="form-select" x-model="programmingLanguages[idx].name">
