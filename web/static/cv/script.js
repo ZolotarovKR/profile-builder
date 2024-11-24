@@ -1,7 +1,7 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('cv', () => ({
         id: 0,
-        currentSection: 'personalDetails',
+        activeSection: 'personalDetails',
         relevantSections: [],
         inEditMode: false,
 
@@ -42,8 +42,8 @@ document.addEventListener('alpine:init', () => {
         },
         e: [],
         we: [],
-        l: [],
-        pl: [],
+        ls: [],
+        pls: [],
 
         async init() {
             this.extractId();
@@ -52,6 +52,40 @@ document.addEventListener('alpine:init', () => {
         extractId() {
             let params = new URLSearchParams(window.location.search);
             this.id = Number(params.get('id'));
+        },
+        enterEditMode() {
+            switch (this.activeSection) {
+                case 'personalDetails':
+                    this.pd = structuredClone(Alpine.raw(this.personalDetails));
+                    break;
+                case 'contacts':
+                    this.c = structuredClone(Alpine.raw(this.contacts));
+                    break;
+                case 'education':
+                    this.e = structuredClone(Alpine.raw(this.education));
+                    break;
+                case 'workExperience':
+                    this.we = structuredClone(Alpine.raw(this.workExperience));
+                    break;
+                case 'languages':
+                    this.ls = structuredClone(Alpine.raw(this.languages));
+                    break;
+                case 'programmingLanguages':
+                    this.pls = structuredClone(Alpine.raw(this.programmingLanguages));
+                    break;
+                default:
+                    return;
+            }
+            this.inEditMode = true;
+        },
+        async selectSection(s) {
+            if (this.inEditMode) {
+                return;
+            }
+            await this.fetchSection(s);
+            if (this.relevantSections.includes(s)) {
+                this.activeSection = s;
+            }
         },
         async fetchSection(s) {
             if (this.relevantSections.includes(s)) {
@@ -81,23 +115,10 @@ document.addEventListener('alpine:init', () => {
             }
             this.relevantSections.push(s);
         },
-        enterEditMode(s) {
-            switch (s) {
-                case 'personalDetails':
-                    this.pd = structuredClone(Alpine.raw(this.personalDetails));
-                    break;
-                case 'contacts':
-                    this.c = structuredClone(Alpine.raw(this.contacts));
-                    break;
-                default:
-                    return;
-            }
-            this.inEditMode = true;
-        },
-        async saveChanges(s) {
+        async saveActiveSection() {
             let url;
             let data;
-            switch (s) {
+            switch (this.activeSection) {
                 case 'personalDetails':
                     url = '/api/personal-details/' + this.id;
                     data = structuredClone(Alpine.raw(this.pd));
@@ -106,6 +127,22 @@ document.addEventListener('alpine:init', () => {
                 case 'contacts':
                     url = '/api/contacts/' + this.id;
                     data = structuredClone(Alpine.raw(this.c));
+                    break;
+                case 'education':
+                    url = '/api/education/' + this.id;
+                    data = structuredClone(Alpine.raw(this.e));
+                    break;
+                case 'workExperience':
+                    url = '/api/work-experience/' + this.id;
+                    data = structuredClone(Alpine.raw(this.we));
+                    break;
+                case 'languages':
+                    url = '/api/languages/' + this.id;
+                    data = structuredClone(Alpine.raw(this.ls));
+                    break;
+                case 'programmingLanguages':
+                    url = '/api/programming-languages/' + this.id;
+                    data = structuredClone(Alpine.raw(this.pls));
                     break;
                 default:
                     return;
@@ -121,9 +158,9 @@ document.addEventListener('alpine:init', () => {
                 alert(await resp.text());
                 return;
             }
+            this.relevantSections.splice(this.relevantSections.indexOf(this.activeSection), 1);
+            this.fetchSection(this.activeSection);
             this.inEditMode = false;
-            this.relevantSections.splice(this.relevantSections.indexOf(s), 1);
-            this.fetchSection(s);
         },
     }));
 });
