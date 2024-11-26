@@ -46,12 +46,9 @@ document.addEventListener('alpine:init', () => {
         pls: [],
 
         async init() {
-            this.extractId();
-            await this.fetchSection('personalDetails');
-        },
-        extractId() {
             let params = new URLSearchParams(window.location.search);
             this.id = Number(params.get('id'));
+            await this.fetchActiveSection();
         },
         enterEditMode() {
             switch (this.activeSection) {
@@ -79,74 +76,74 @@ document.addEventListener('alpine:init', () => {
             this.inEditMode = true;
         },
         async selectSection(s) {
-            if (this.inEditMode) {
-                return;
-            }
-            await this.fetchSection(s);
-            if (this.relevantSections.includes(s)) {
-                this.activeSection = s;
-            }
+            if (this.inEditMode) return;
+
+            this.activeSection = s;
+            await this.fetchActiveSection();
         },
-        async fetchSection(s) {
-            if (this.relevantSections.includes(s)) {
+        async fetchActiveSection() {
+            if (this.relevantSections.includes(this.activeSection)) return;
+
+            let url = this.getActiveSectionUrl();
+
+            let resp = await fetch(url);
+            if (resp.status !== 200) {
+                alert(await resp.text());
                 return;
             }
-            switch (s) {
+            let data = await resp.json();
+            switch (this.activeSection) {
                 case 'personalDetails':
-                    this.personalDetails = await (await fetch('/api/personal-details/' + this.id)).json();
+                    this.personalDetails = data;
                     break;
                 case 'contacts':
-                    this.contacts = await (await fetch('/api/contacts/' + this.id)).json();
+                    this.contacts = data;
                     break;
                 case 'education':
-                    this.education = await (await fetch('/api/education/' + this.id)).json();
+                    this.education = data;
                     break;
                 case 'workExperience':
-                    this.workExperience = await (await fetch('/api/work-experience/' + this.id)).json();
+                    this.workExperience = data;
                     break;
                 case 'languages':
-                    this.languages = await (await fetch('/api/languages/' + this.id)).json();
+                    this.languages = data;
                     break;
                 case 'programmingLanguages':
-                    this.programmingLanguages = await (await fetch('/api/programming-languages/' + this.id)).json();
+                    this.programmingLanguages = data;
                     break;
                 default:
                     return;
             }
-            this.relevantSections.push(s);
+            this.relevantSections.push(this.activeSection);
         },
         async saveActiveSection() {
-            let url;
+            let url = this.getActiveSectionUrl();
             let data;
             switch (this.activeSection) {
                 case 'personalDetails':
-                    url = '/api/personal-details/' + this.id;
                     data = structuredClone(Alpine.raw(this.pd));
                     data.age = Number(data.age);
                     break;
                 case 'contacts':
-                    url = '/api/contacts/' + this.id;
                     data = structuredClone(Alpine.raw(this.c));
                     break;
                 case 'education':
-                    url = '/api/education/' + this.id;
                     data = structuredClone(Alpine.raw(this.e));
                     break;
                 case 'workExperience':
-                    url = '/api/work-experience/' + this.id;
                     data = structuredClone(Alpine.raw(this.we));
                     break;
                 case 'languages':
-                    url = '/api/languages/' + this.id;
                     data = structuredClone(Alpine.raw(this.ls));
                     break;
                 case 'programmingLanguages':
-                    url = '/api/programming-languages/' + this.id;
                     data = structuredClone(Alpine.raw(this.pls));
                     break;
                 default:
+                    console.error('Unknown section: ' + s);
                     return;
             }
+
             let resp = await fetch(url, {
                 method: 'PUT',
                 headers: {
@@ -159,8 +156,39 @@ document.addEventListener('alpine:init', () => {
                 return;
             }
             this.relevantSections.splice(this.relevantSections.indexOf(this.activeSection), 1);
-            this.fetchSection(this.activeSection);
+            await this.fetchActiveSection();
             this.inEditMode = false;
+        },
+        async deleteThisCV() {
+            if (!confirm('Are you sure?')) return;
+
+            let resp = await fetch('/api/cv/' + this.id, {
+                method: 'DELETE',
+            });
+            if (resp.status !== 200) {
+                alert(await resp.text());
+                return;
+            }
+            window.location.href = '/';
+        },
+        getActiveSectionUrl() {
+            switch (this.activeSection) {
+                case 'personalDetails':
+                    return '/api/personal-details/' + this.id;
+                case 'contacts':
+                    return '/api/contacts/' + this.id;
+                case 'education':
+                    return '/api/education/' + this.id;
+                case 'workExperience':
+                    return '/api/work-experience/' + this.id;
+                case 'languages':
+                    return '/api/languages/' + this.id;
+                case 'programmingLanguages':
+                    return '/api/programming-languages/' + this.id;
+                default:
+                    console.error('Unknown section: ' + s);
+                    return null;
+            }
         },
     }));
 });
