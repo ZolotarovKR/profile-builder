@@ -9,7 +9,7 @@
         <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </head>
-    <body x-data="cv">
+    <body x-data>
         <nav class="navbar navbar-expand-xl bg-body-tertiary" data-bs-theme="dark">
             <div class="container">
                 <a class="navbar-brand" href="/">Profile Builder</a>
@@ -21,68 +21,93 @@
                         <li class="nav-item">
                             <span
                                 class="nav-link"
-                                x-bind:class="activeSection === 'personalDetails' ? 'active' : ''"
-                                x-on:click="selectSection('personalDetails')"
+                                x-bind:class="$store.activeSection === 'personalDetails' ? 'active' : ''"
+                                x-on:click="if (!$store.inEditMode) { $store.activeSection = 'personalDetails' }"
                                 >Personal Details</span
                             >
                         </li>
                         <li class="nav-item">
-                            <span class="nav-link" x-bind:class="activeSection === 'contacts' ? 'active' : ''" x-on:click="selectSection('contacts')"
+                            <span
+                                class="nav-link"
+                                x-bind:class="$store.activeSection === 'contacts' ? 'active' : ''"
+                                x-on:click="if (!$store.inEditMode) { $store.activeSection = 'contacts' }"
                                 >Contacts</span
                             >
                         </li>
                         <li class="nav-item">
-                            <span class="nav-link" x-bind:class="activeSection === 'education' ? 'active' : ''" x-on:click="selectSection('education')"
+                            <span
+                                class="nav-link"
+                                x-bind:class="$store.activeSection === 'education' ? 'active' : ''"
+                                x-on:click="if (!$store.inEditMode) { $store.activeSection = 'education' }"
                                 >Education</span
                             >
                         </li>
                         <li class="nav-item">
                             <span
                                 class="nav-link"
-                                x-bind:class="activeSection === 'workExperience' ? 'active' : ''"
-                                x-on:click="selectSection('workExperience')"
+                                x-bind:class="$store.activeSection === 'workExperience' ? 'active' : ''"
+                                x-on:click="if (!$store.inEditMode) { $store.activeSection = 'workExperience' }"
                                 >Work Experience</span
                             >
                         </li>
                         <li class="nav-item">
-                            <span class="nav-link" x-bind:class="activeSection === 'languages' ? 'active' : ''" x-on:click="selectSection('languages')"
+                            <span
+                                class="nav-link"
+                                x-bind:class="$store.activeSection === 'languages' ? 'active' : ''"
+                                x-on:click="if (!$store.inEditMode) { $store.activeSection = 'languages' }"
                                 >Languages</span
                             >
                         </li>
                         <li class="nav-item">
                             <span
                                 class="nav-link"
-                                x-bind:class="activeSection === 'programmingLanguages' ? 'active' : ''"
-                                x-on:click="selectSection('programmingLanguages')"
+                                x-bind:class="$store.activeSection === 'programmingLanguages' ? 'active' : ''"
+                                x-on:click="if (!$store.inEditMode) { $store.activeSection = 'programmingLanguages' }"
                                 >Programming Languages</span
                             >
                         </li>
                     </ul>
-                    <button class="btn btn-outline-danger" type="button" x-on:click="deleteThisCV()">Delete</button>
+                    <button class="btn btn-outline-danger" type="button" x-on:click="$store.deleteCv()">Delete</button>
                 </div>
             </div>
         </nav>
         <main class="container-md border p-5">
-            <section x-show="activeSection === 'personalDetails'">
+            <section x-show="$store.activeSection === 'personalDetails'">
                 <h2>Personal Details</h2>
-                <div x-show="!inEditMode">
-                    <div class="mb-3" x-text="'Full Name: ' + personalDetails.fullName"></div>
-                    <div class="mb-3" x-text="'Gender: ' + personalDetails.gender"></div>
-                    <div class="mb-3" x-text="'Age: ' + personalDetails.age"></div>
-                    <div class="mb-3" x-text="'Citizenship: ' + personalDetails.citizenship"></div>
-                    <div class="mb-3" x-text="'Marital Status: ' + personalDetails.maritalStatus"></div>
+                <div
+                    x-show="!$store.inEditMode"
+                    x-data="personalDetails"
+                    x-init="get(); $watch('$store.activeSection', value => { if (value === 'personalDetails') get() })"
+                    x-on:update.window="isUpToDate = false; get()"
+                >
+                    <div class="mb-3" x-text="'Full Name: ' + fullName"></div>
+                    <div class="mb-3" x-text="'Gender: ' + gender"></div>
+                    <div class="mb-3" x-text="'Age: ' + age"></div>
+                    <div class="mb-3" x-text="'Citizenship: ' + citizenship"></div>
+                    <div class="mb-3" x-text="'Marital Status: ' + maritalStatus"></div>
                     <div>
-                        <button class="btn btn-outline-secondary" type="button" x-on:click="enterEditMode()">Edit</button>
+                        <button
+                            class="btn btn-outline-secondary"
+                            type="button"
+                            x-on:click="$dispatch('setup', JSON.stringify($data)); $store.inEditMode = true"
+                        >
+                            Edit
+                        </button>
                     </div>
                 </div>
-                <form x-show="inEditMode" x-on:submit.prevent="saveActiveSection()">
+                <form
+                    x-show="$store.inEditMode"
+                    x-data="personalDetailsForm"
+                    x-on:setup.window="Object.assign($data, JSON.parse($event.detail))"
+                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update'); $store.inEditMode = false  }"
+                >
                     <div class="mb-3">
                         <label for="fullName" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="fullName" placeholder="John Doe" x-model="pd.fullName" />
+                        <input type="text" class="form-control" id="fullName" placeholder="John Doe" x-model="fullName" />
                     </div>
                     <div class="mb-3">
                         <label for="gender" class="form-label">Gender</label>
-                        <select class="form-select" id="gender" x-model="pd.gender">
+                        <select class="form-select" id="gender" x-model="gender">
                             <option value="Male" selected>Male</option>
                             <option value="Female">Female</option>
                             <option value="Other">Other</option>
@@ -90,81 +115,97 @@
                     </div>
                     <div class="mb-3">
                         <label for="age" class="form-label">Age</label>
-                        <input type="text" class="form-control" id="age" placeholder="18" x-model="pd.age" />
+                        <input type="text" class="form-control" id="age" placeholder="18" x-model="age" />
                     </div>
                     <div class="mb-3">
                         <label for="citizenship" class="form-label">Citizenship</label>
-                        <select class="form-select" id="citizenship" x-model="pd.citizenship">
+                        <select class="form-select" id="citizenship" x-model="citizenship">
                             <option value="Ukrainian" selected>Ukrainian</option>
                             <option value="German">German</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="maritalStatus" class="form-label">Marital Status</label>
-                        <select class="form-select" id="maritalStatus" x-model="pd.maritalStatus">
+                        <select class="form-select" id="maritalStatus" x-model="maritalStatus">
                             <option value="Single" selected>Single</option>
                             <option value="Married">Married</option>
                         </select>
                     </div>
                     <div>
                         <button class="btn btn-success" type="submit">Submit</button>
-                        <button class="btn btn-danger" type="button" x-on:click="inEditMode = false">Cancel</button>
+                        <button class="btn btn-danger" type="button" x-on:click="$store.inEditMode = false">Cancel</button>
                     </div>
                 </form>
             </section>
-            <section x-show="activeSection === 'contacts'">
+            <section x-show="$store.activeSection === 'contacts'">
                 <h2>Contacts</h2>
-                <div x-show="!inEditMode">
+                <div
+                    x-show="!$store.inEditMode"
+                    x-data="contacts"
+                    x-init="$watch('$store.activeSection', value => { if (value === 'contacts') get() })"
+                    x-on:update.window="isUpToDate = false; get()"
+                >
                     <h3>Emails</h3>
                     <ul class="list-group mb-3">
-                        <template x-for="email in contacts.emails">
+                        <template x-for="email in emails">
                             <li class="list-group-item" x-text="email"></li>
                         </template>
                     </ul>
                     <h3>Phone Numbers</h3>
                     <ul class="list-group mb-3">
-                        <template x-for="phoneNumber in contacts.phoneNumbers">
+                        <template x-for="phoneNumber in phoneNumbers">
                             <li class="list-group-item" x-text="phoneNumber"></li>
                         </template>
                     </ul>
                     <h3>Location</h3>
-                    <div class="mb-3" x-text="contacts.location.country + ', ' + contacts.location.city"></div>
+                    <div class="mb-3" x-text="location.country + ', ' + location.city"></div>
                     <div>
-                        <button class="btn btn-outline-secondary" type="button" x-on:click="enterEditMode()">Edit</button>
+                        <button
+                            class="btn btn-outline-secondary"
+                            type="button"
+                            x-on:click="$dispatch('setup', JSON.stringify($data)); $store.inEditMode = true"
+                        >
+                            Edit
+                        </button>
                     </div>
                 </div>
-                <form x-show="inEditMode" x-on:submit.prevent="saveActiveSection()">
+                <form
+                    x-show="$store.inEditMode"
+                    x-data="contactsForm"
+                    x-on:setup.window="Object.assign($data, JSON.parse($event.detail))"
+                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update'); $store.inEditMode = false  }"
+                >
                     <h3>Emails</h3>
-                    <template x-for="(email, idx) in c.emails">
+                    <template x-for="(email, idx) in emails">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="johndoe@example.com" x-model="c.emails[idx]" />
-                            <button class="btn btn-outline-danger" type="button" x-on:click="c.emails.splice(idx, 1)">Delete</button>
+                            <input type="text" class="form-control" placeholder="johndoe@example.com" x-model="emails[idx]" />
+                            <button class="btn btn-outline-danger" type="button" x-on:click="emails.splice(idx, 1)">Delete</button>
                         </div>
                     </template>
                     <div class="mb-3">
-                        <button type="button" class="btn btn-outline-secondary" x-on:click="c.emails.push('')">Add</button>
+                        <button type="button" class="btn btn-outline-secondary" x-on:click="emails.push('')">Add</button>
                     </div>
                     <h3>Phone Numbers</h3>
-                    <template x-for="(phoneNumber, idx) in c.phoneNumbers">
+                    <template x-for="(phoneNumber, idx) in phoneNumbers">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="+380 12 345 67 89" x-model="c.phoneNumbers[idx]" />
-                            <button class="btn btn-outline-danger" type="button" x-on:click="c.phoneNumbers.splice(idx, 1)">Delete</button>
+                            <input type="text" class="form-control" placeholder="+380 12 345 67 89" x-model="phoneNumbers[idx]" />
+                            <button class="btn btn-outline-danger" type="button" x-on:click="phoneNumbers.splice(idx, 1)">Delete</button>
                         </div>
                     </template>
                     <div class="mb-3">
-                        <button type="button" class="btn btn-outline-secondary" x-on:click="c.phoneNumbers.push('')">Add</button>
+                        <button type="button" class="btn btn-outline-secondary" x-on:click="phoneNumbers.push('')">Add</button>
                     </div>
                     <h3>Location</h3>
                     <div class="mb-3">
                         <label for="country" class="form-label">Country</label>
-                        <select class="form-select" id="country" x-model="c.location.country">
+                        <select class="form-select" id="country" x-model="location.country">
                             <option value="Ukraine" selected>Ukraine</option>
                             <option value="Germany">Germany</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="city" class="form-label">City</label>
-                        <select class="form-select" id="city" x-model="c.location.city">
+                        <select class="form-select" id="city" x-model="location.city">
                             <option value="Kyiv" selected>Kyiv</option>
                             <option value="Kharkiv">Kharkiv</option>
                             <option value="Lviv">Lviv</option>
@@ -175,64 +216,103 @@
                     </div>
                     <div>
                         <button class="btn btn-success" type="submit">Submit</button>
-                        <button class="btn btn-danger" type="button" x-on:click="inEditMode = false">Cancel</button>
+                        <button class="btn btn-danger" type="button" x-on:click="$store.inEditMode = false">Cancel</button>
                     </div>
                 </form>
             </section>
-            <section x-show="activeSection === 'education'">
+            <section x-show="$store.activeSection === 'education'">
                 <h2>Education</h2>
-                <div x-show="!inEditMode">
-                    <template x-for="course in education">
+                <div
+                    x-show="!$store.inEditMode"
+                    x-data="education"
+                    x-init="$watch('$store.activeSection', value => { if (value === 'education') get() })"
+                    x-on:update.window="isUpToDate = false; get()"
+                >
+                    <template x-for="course in courses">
                         <div class="border rounded p-3 mb-3">
                             <h3 x-text="course.name  + ' (' + course.period.start + ' - ' + course.period.end + ')'"></h3>
                             <div x-text="course.institute"></div>
                         </div>
                     </template>
                     <div>
-                        <button class="btn btn-outline-secondary" type="button" x-on:click="enterEditMode()">Edit</button>
+                        <button
+                            class="btn btn-outline-secondary"
+                            type="button"
+                            x-on:click="$dispatch('setup', JSON.stringify($data)); $store.inEditMode = true"
+                        >
+                            Edit
+                        </button>
                     </div>
                 </div>
-                <form x-show="inEditMode" x-on:submit.prevent="saveActiveSection()">
-                    <template x-for="(course, idx) in e">
+                <form
+                    x-show="$store.inEditMode"
+                    x-data="educationForm"
+                    x-on:setup.window="Object.assign($data, JSON.parse($event.detail))"
+                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update'); $store.inEditMode = false  }"
+                >
+                    <template x-for="(course, idx) in courses">
                         <div class="border rounded p-4 mb-3">
                             <div class="mb-3">
                                 <label x-bind:for="'courseName' + idx" class="form-label">Name</label>
-                                <input type="text" class="form-control" x-bind:id="'courseName' + idx" placeholder="Bachelor of CS" x-model="e[idx].name" />
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    x-bind:id="'courseName' + idx"
+                                    placeholder="Bachelor of CS"
+                                    x-model="courses[idx].name"
+                                />
                             </div>
                             <div class="mb-3">
                                 <label x-bind:for="'courseInstitute' + idx" class="form-label">Institute</label>
-                                <input type="text" class="form-control" x-bind:for="'courseInstitute' + idx" placeholder="NURE" x-model="e[idx].institute" />
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    x-bind:for="'courseInstitute' + idx"
+                                    placeholder="NURE"
+                                    x-model="courses[idx].institute"
+                                />
                             </div>
                             <div class="mb-3">
                                 <label x-bind:for="'courseStart' + idx" class="form-label">Start</label>
-                                <input type="text" class="form-control" x-bind:id="'courseStart' + idx" placeholder="2022" x-model="e[idx].period.start" />
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    x-bind:id="'courseStart' + idx"
+                                    placeholder="2022"
+                                    x-model="courses[idx].period.start"
+                                />
                             </div>
                             <div class="mb-3">
                                 <label x-bind:for="'courseEnd' + idx" class="form-label">End</label>
-                                <input type="text" class="form-control" x-bind:id="'courseEnd' + idx" placeholder="2027" x-model="e[idx].period.end" />
+                                <input type="text" class="form-control" x-bind:id="'courseEnd' + idx" placeholder="2027" x-model="courses[idx].period.end" />
                             </div>
-                            <button class="btn btn-outline-danger" type="button" x-on:click="e.splice(idx, 1)">Delete</button>
+                            <button class="btn btn-outline-danger" type="button" x-on:click="courses.splice(idx, 1)">Delete</button>
                         </div>
                     </template>
                     <div class="mb-3">
                         <button
                             type="button"
                             class="btn btn-outline-secondary"
-                            x-on:click="e.push({ name: '', institute: '', period: { start: '', end: '' } })"
+                            x-on:click="courses.push({ name: '', institute: '', period: { start: '', end: '' } })"
                         >
                             Add
                         </button>
                     </div>
                     <div>
                         <button class="btn btn-success" type="submit">Submit</button>
-                        <button class="btn btn-danger" type="button" x-on:click="inEditMode = false">Cancel</button>
+                        <button class="btn btn-danger" type="button" x-on:click="$store.inEditMode = false">Cancel</button>
                     </div>
                 </form>
             </section>
-            <section x-show="activeSection === 'workExperience'">
+            <section x-show="$store.activeSection === 'workExperience'">
                 <h2>Work Experience</h2>
-                <div x-show="!inEditMode">
-                    <template x-for="jobRecord in workExperience">
+                <div
+                    x-show="!$store.inEditMode"
+                    x-data="workExperience"
+                    x-init="$watch('$store.activeSection', value => { if (value === 'workExperience') get() })"
+                    x-on:update.window="isUpToDate = false; get()"
+                >
+                    <template x-for="jobRecord in jobRecords">
                         <div class="border rounded p-3 mb-3">
                             <h3 x-text="jobRecord.companyName + ' (' + jobRecord.period.start + ' - ' + jobRecord.period.end + ')'"></h3>
                             <div x-text="jobRecord.position"></div>
@@ -242,11 +322,22 @@
                         </div>
                     </template>
                     <div>
-                        <button class="btn btn-outline-secondary" type="button" x-on:click="enterEditMode()">Edit</button>
+                        <button
+                            class="btn btn-outline-secondary"
+                            type="button"
+                            x-on:click="$dispatch('setup', JSON.stringify($data)); $store.inEditMode = true"
+                        >
+                            Edit
+                        </button>
                     </div>
                 </div>
-                <form x-show="inEditMode" x-on:submit.prevent="saveActiveSection()">
-                    <template x-for="(jobRecord, idx) in we">
+                <form
+                    x-show="$store.inEditMode"
+                    x-data="workExperienceForm"
+                    x-on:setup.window="Object.assign($data, JSON.parse($event.detail))"
+                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update'); $store.inEditMode = false  }"
+                >
+                    <template x-for="(jobRecord, idx) in jobRecords">
                         <div class="border rounded p-4 mb-3">
                             <div class="mb-3">
                                 <label x-bind:for="'jobRecordCompany' + idx" class="form-label">Company</label>
@@ -255,7 +346,7 @@
                                     class="form-control"
                                     x-bind:id="'jobRecordCompany' + idx"
                                     placeholder="Apple Inc."
-                                    x-model="we[idx].companyName"
+                                    x-model="jobRecords[idx].companyName"
                                 />
                             </div>
                             <div class="mb-3">
@@ -265,19 +356,19 @@
                                     class="form-control"
                                     x-bind:id="'jobRecordPosition' + idx"
                                     placeholder="Golang Backend Developer"
-                                    x-model="we[idx].position"
+                                    x-model="jobRecords[idx].position"
                                 />
                             </div>
                             <div class="mb-3">
                                 <label x-bind:for="'jobRecordCountry' + idx" class="form-label">Country</label>
-                                <select class="form-select" x-bind:id="'jobRecordCountry' + idx" x-model="we[idx].location.country">
+                                <select class="form-select" x-bind:id="'jobRecordCountry' + idx" x-model="jobRecords[idx].location.country">
                                     <option value="Ukraine" selected>Ukraine</option>
                                     <option value="Germany">Germany</option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label x-bind:for="'jobRecordCity' + idx" class="form-label">City</label>
-                                <select class="form-select" x-bind:id="'jobRecordCity' + idx" x-model="we[idx].location.city">
+                                <select class="form-select" x-bind:id="'jobRecordCity' + idx" x-model="jobRecords[idx].location.city">
                                     <option value="Kyiv" selected>Kyiv</option>
                                     <option value="Kharkiv">Kharkiv</option>
                                     <option value="Lviv">Lviv</option>
@@ -288,11 +379,23 @@
                             </div>
                             <div class="mb-3">
                                 <label x-bind:for="'jobRecordStart' + idx" class="form-label">Start</label>
-                                <input type="text" class="form-control" x-bind:id="'jobRecordStart' + idx" placeholder="2026" x-model="we[idx].period.start" />
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    x-bind:id="'jobRecordStart' + idx"
+                                    placeholder="2026"
+                                    x-model="jobRecords[idx].period.start"
+                                />
                             </div>
                             <div class="mb-3">
                                 <label x-bind:for="'jobRecordEnd' + idx" class="form-label">End</label>
-                                <input type="text" class="form-control" x-bind:id="'jobRecordEnd' + idx" placeholder="2028" x-model="we[idx].period.end" />
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    x-bind:id="'jobRecordEnd' + idx"
+                                    placeholder="2028"
+                                    x-model="jobRecords[idx].period.end"
+                                />
                             </div>
                             <div class="mb-3">
                                 <label x-bind:for="'jobRecordAchievements' + idx" class="form-label">Achievements</label>
@@ -301,30 +404,36 @@
                                     class="form-control"
                                     x-bind:id="'jobRecordAchievements' + idx"
                                     placeholder="Developed high-performance, scalable Golang backend services to power..."
-                                    x-model="we[idx].achievements"
+                                    x-model="jobRecords[idx].achievements"
                                 ></textarea>
                             </div>
-                            <button class="btn btn-outline-danger" type="button" x-on:click="we.splice(idx, 1)">Delete</button>
+                            <button class="btn btn-outline-danger" type="button" x-on:click="jobRecords.splice(idx, 1)">Delete</button>
                         </div>
                     </template>
                     <div class="mb-3">
                         <button
                             type="button"
                             class="btn btn-outline-secondary"
-                            x-on:click="we.push({ companyName: '', location: { country: 'Ukraine', city: 'Kyiv' }, position: '', period: { start: '', end: '' }, achievements: '' })"
+                            x-on:click="jobRecords.push({ companyName: '', location: { country: 'Ukraine', city: 'Kyiv' }, position: '', period: { start: '', end: '' }, achievements: '' })"
                         >
                             Add
                         </button>
                     </div>
                     <div>
                         <button class="btn btn-success" type="submit">Submit</button>
-                        <button class="btn btn-danger" type="button" x-on:click="inEditMode = false">Cancel</button>
+                        <button class="btn btn-danger" type="button" x-on:click="$store.inEditMode = false">Cancel</button>
                     </div>
                 </form>
             </section>
-            <section x-show="activeSection === 'languages'">
+            <section x-show="$store.activeSection === 'languages'">
                 <h2>Languages</h2>
-                <div class="table-responsive" x-show="!inEditMode">
+                <div
+                    class="table-responsive"
+                    x-show="!$store.inEditMode"
+                    x-data="languages"
+                    x-init="$watch('$store.activeSection', value => { if (value === 'languages') get() })"
+                    x-on:update.window="isUpToDate = false; get()"
+                >
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -342,18 +451,29 @@
                         </tbody>
                     </table>
                     <div>
-                        <button class="btn btn-outline-secondary" type="button" x-on:click="enterEditMode()">Edit</button>
+                        <button
+                            class="btn btn-outline-secondary"
+                            type="button"
+                            x-on:click="$dispatch('setup', JSON.stringify($data)); $store.inEditMode = true"
+                        >
+                            Edit
+                        </button>
                     </div>
                 </div>
-                <form x-show="inEditMode" x-on:submit.prevent="saveActiveSection()">
-                    <template x-for="(language, idx) in ls">
+                <form
+                    x-show="$store.inEditMode"
+                    x-data="languagesForm"
+                    x-on:setup.window="Object.assign($data, JSON.parse($event.detail))"
+                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update'); $store.inEditMode = false  }"
+                >
+                    <template x-for="(language, idx) in languages">
                         <div class="input-group mb-3">
-                            <select class="form-select" x-model="ls[idx].name">
+                            <select class="form-select" x-model="languages[idx].name">
                                 <option value="Ukrainian" selected>Ukrainian</option>
                                 <option value="English">English</option>
                                 <option value="German">German</option>
                             </select>
-                            <select class="form-select" x-model="ls[idx].level">
+                            <select class="form-select" x-model="languages[idx].level">
                                 <option value="Native" selected>Native</option>
                                 <option value="A1">A1</option>
                                 <option value="A2">A2</option>
@@ -362,21 +482,27 @@
                                 <option value="C1">C1</option>
                                 <option value="C2">C2</option>
                             </select>
-                            <button class="btn btn-outline-danger" type="button" x-on:click="ls.splice(idx, 1)">Delete</button>
+                            <button class="btn btn-outline-danger" type="button" x-on:click="languages.splice(idx, 1)">Delete</button>
                         </div>
                     </template>
                     <div class="mb-3">
-                        <button type="button" class="btn btn-outline-secondary" x-on:click="ls.push({ name: 'Ukrainian', level: 'Native' })">Add</button>
+                        <button type="button" class="btn btn-outline-secondary" x-on:click="languages.push({ name: 'Ukrainian', level: 'Native' })">Add</button>
                     </div>
                     <div>
                         <button class="btn btn-success" type="submit">Submit</button>
-                        <button class="btn btn-danger" type="button" x-on:click="inEditMode = false">Cancel</button>
+                        <button class="btn btn-danger" type="button" x-on:click="$store.inEditMode = false">Cancel</button>
                     </div>
                 </form>
             </section>
-            <section x-show="activeSection === 'programmingLanguages'">
+            <section x-show="$store.activeSection === 'programmingLanguages'">
                 <h2>Programming Languages</h2>
-                <div class="table-responsive" x-show="!inEditMode">
+                <div
+                    class="table-responsive"
+                    x-show="!$store.inEditMode"
+                    x-data="programmingLanguages"
+                    x-init="$watch('$store.activeSection', value => { if (value === 'programmingLanguages') get() })"
+                    x-on:update.window="isUpToDate = false; get()"
+                >
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -394,13 +520,24 @@
                         </tbody>
                     </table>
                     <div>
-                        <button class="btn btn-outline-secondary" type="button" x-on:click="enterEditMode()">Edit</button>
+                        <button
+                            class="btn btn-outline-secondary"
+                            type="button"
+                            x-on:click="$dispatch('setup', JSON.stringify($data)); $store.inEditMode = true"
+                        >
+                            Edit
+                        </button>
                     </div>
                 </div>
-                <form x-show="inEditMode" x-on:submit.prevent="saveActiveSection()">
-                    <template x-for="(programmingLanguage, idx) in pls">
+                <form
+                    x-show="$store.inEditMode"
+                    x-data="programmingLanguagesForm"
+                    x-on:setup.window="Object.assign($data, JSON.parse($event.detail))"
+                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update'); $store.inEditMode = false  }"
+                >
+                    <template x-for="(programmingLanguage, idx) in programmingLanguages">
                         <div class="input-group mb-3">
-                            <select class="form-select" x-model="pls[idx].name">
+                            <select class="form-select" x-model="programmingLanguages[idx].name">
                                 <option value="C++" selected>C++</option>
                                 <option value="C#">C#</option>
                                 <option value="Java">Java</option>
@@ -410,21 +547,23 @@
                                 <option value="Rust">Rust</option>
                                 <option value="Golang">Golang</option>
                             </select>
-                            <select class="form-select" x-model="pls[idx].level">
+                            <select class="form-select" x-model="programmingLanguages[idx].level">
                                 <option value="Trainee" selected>Trainee</option>
                                 <option value="Junior">Junior</option>
                                 <option value="Middle">Middle</option>
                                 <option value="Senior">Senior</option>
                             </select>
-                            <button class="btn btn-outline-danger" type="button" x-on:click="pls.splice(idx, 1)">Delete</button>
+                            <button class="btn btn-outline-danger" type="button" x-on:click="programmingLanguages.splice(idx, 1)">Delete</button>
                         </div>
                     </template>
                     <div class="mb-3">
-                        <button type="button" class="btn btn-outline-secondary" x-on:click="pls.push({ name: 'C++', level: 'Trainee' })">Add</button>
+                        <button type="button" class="btn btn-outline-secondary" x-on:click="programmingLanguages.push({ name: 'C++', level: 'Trainee' })">
+                            Add
+                        </button>
                     </div>
                     <div>
                         <button class="btn btn-success" type="submit">Submit</button>
-                        <button class="btn btn-danger" type="button" x-on:click="inEditMode = false">Cancel</button>
+                        <button class="btn btn-danger" type="button" x-on:click="$store.inEditMode = false">Cancel</button>
                     </div>
                 </form>
             </section>
