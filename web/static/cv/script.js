@@ -89,6 +89,7 @@ document.addEventListener('alpine:init', () => {
         isUpToDate: false,
         courses: [],
         async get() {
+            if (this.isUpToDate) return;
             const resp = await fetch('/api/education/' + Alpine.store('id'));
             this.courses = await resp.json();
             this.isUpToDate = true;
@@ -113,6 +114,7 @@ document.addEventListener('alpine:init', () => {
         isUpToDate: false,
         jobRecords: [],
         async get() {
+            if (this.isUpToDate) return;
             const resp = await fetch('/api/work-experience/' + Alpine.store('id'));
             this.jobRecords = await resp.json();
             this.isUpToDate = true;
@@ -137,6 +139,7 @@ document.addEventListener('alpine:init', () => {
         isUpToDate: false,
         languages: [],
         async get() {
+            if (this.isUpToDate) return;
             const resp = await fetch('/api/languages/' + Alpine.store('id'));
             this.languages = await resp.json();
             this.isUpToDate = true;
@@ -161,6 +164,7 @@ document.addEventListener('alpine:init', () => {
         isUpToDate: false,
         programmingLanguages: [],
         async get() {
+            if (this.isUpToDate) return;
             const resp = await fetch('/api/programming-languages/' + Alpine.store('id'));
             this.programmingLanguages = await resp.json();
             this.isUpToDate = true;
