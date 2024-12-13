@@ -78,7 +78,7 @@
                     x-show="!$store.inEditMode"
                     x-data="personalDetails"
                     x-init="get(); $watch('$store.activeSection', value => { if (value === 'personalDetails') get() })"
-                    x-on:update.window="isUpToDate = false; get()"
+                    x-on:update-personal-details.window="isUpToDate = false; get()"
                 >
                     <div class="mb-3" x-text="'Full Name: ' + fullName"></div>
                     <div class="mb-3" x-text="'Gender: ' + gender"></div>
@@ -99,7 +99,7 @@
                     x-show="$store.inEditMode"
                     x-data="personalDetailsForm"
                     x-on:setup.window="Object.assign($data, JSON.parse($event.detail))"
-                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update'); $store.inEditMode = false  }"
+                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update-personal-details'); $store.inEditMode = false  }"
                 >
                     <div class="mb-3">
                         <label for="fullName" class="form-label">Full Name</label>
@@ -143,7 +143,7 @@
                     x-show="!$store.inEditMode"
                     x-data="contacts"
                     x-init="$watch('$store.activeSection', value => { if (value === 'contacts') get() })"
-                    x-on:update.window="isUpToDate = false; get()"
+                    x-on:update-contacts.window="isUpToDate = false; get()"
                 >
                     <h3>Emails</h3>
                     <ul class="list-group mb-3">
@@ -173,7 +173,7 @@
                     x-show="$store.inEditMode"
                     x-data="contactsForm"
                     x-on:setup.window="Object.assign($data, JSON.parse($event.detail))"
-                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update'); $store.inEditMode = false  }"
+                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update-contacts'); $store.inEditMode = false  }"
                 >
                     <h3>Emails</h3>
                     <template x-for="(email, idx) in emails">
@@ -226,7 +226,7 @@
                     x-show="!$store.inEditMode"
                     x-data="education"
                     x-init="$watch('$store.activeSection', value => { if (value === 'education') get() })"
-                    x-on:update.window="isUpToDate = false; get()"
+                    x-on:update-education.window="isUpToDate = false; get()"
                 >
                     <template x-for="course in courses">
                         <div class="border rounded p-3 mb-3">
@@ -248,7 +248,7 @@
                     x-show="$store.inEditMode"
                     x-data="educationForm"
                     x-on:setup.window="Object.assign($data, JSON.parse($event.detail))"
-                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update'); $store.inEditMode = false  }"
+                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update-education'); $store.inEditMode = false  }"
                 >
                     <template x-for="(course, idx) in courses">
                         <div class="border rounded p-4 mb-3">
@@ -310,7 +310,7 @@
                     x-show="!$store.inEditMode"
                     x-data="workExperience"
                     x-init="$watch('$store.activeSection', value => { if (value === 'workExperience') get() })"
-                    x-on:update.window="isUpToDate = false; get()"
+                    x-on:update-work-experience.window="isUpToDate = false; get()"
                 >
                     <template x-for="jobRecord in jobRecords">
                         <div class="border rounded p-3 mb-3">
@@ -335,7 +335,7 @@
                     x-show="$store.inEditMode"
                     x-data="workExperienceForm"
                     x-on:setup.window="Object.assign($data, JSON.parse($event.detail))"
-                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update'); $store.inEditMode = false  }"
+                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update-work-experience'); $store.inEditMode = false  }"
                 >
                     <template x-for="(jobRecord, idx) in jobRecords">
                         <div class="border rounded p-4 mb-3">
@@ -432,7 +432,7 @@
                     x-show="!$store.inEditMode"
                     x-data="languages"
                     x-init="$watch('$store.activeSection', value => { if (value === 'languages') get() })"
-                    x-on:update.window="isUpToDate = false; get()"
+                    x-on:update-languages.window="isUpToDate = false; get()"
                 >
                     <table class="table table-hover">
                         <thead>
@@ -464,7 +464,7 @@
                     x-show="$store.inEditMode"
                     x-data="languagesForm"
                     x-on:setup.window="Object.assign($data, JSON.parse($event.detail))"
-                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update'); $store.inEditMode = false  }"
+                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update-languages'); $store.inEditMode = false  }"
                 >
                     <template x-for="(language, idx) in languages">
                         <div class="input-group mb-3">
@@ -501,7 +501,7 @@
                     x-show="!$store.inEditMode"
                     x-data="programmingLanguages"
                     x-init="$watch('$store.activeSection', value => { if (value === 'programmingLanguages') get() })"
-                    x-on:update.window="isUpToDate = false; get()"
+                    x-on:update-programming-languages.window="isUpToDate = false; get()"
                 >
                     <table class="table table-hover">
                         <thead>
@@ -533,7 +533,7 @@
                     x-show="$store.inEditMode"
                     x-data="programmingLanguagesForm"
                     x-on:setup.window="Object.assign($data, JSON.parse($event.detail))"
-                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update'); $store.inEditMode = false  }"
+                    x-on:submit.prevent="if (await save() !== 400) { $dispatch('update-programming-languages'); $store.inEditMode = false  }"
                 >
                     <template x-for="(programmingLanguage, idx) in programmingLanguages">
                         <div class="input-group mb-3">
