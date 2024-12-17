@@ -289,10 +289,12 @@
                         <button class="btn btn-outline-danger" type="button" x-on:click="programmingLanguages.splice(idx, 1)">Delete</button>
                     </div>
                 </template>
+                <div class="mb-3">
+                    <button type="button" class="btn btn-outline-secondary" x-on:click="programmingLanguages.push({ name: 'C++', level: 'Trainee' })">
+                        Add
+                    </button>
+                </div>
             </section>
-            <div class="mb-3">
-                <button type="button" class="btn btn-outline-secondary" x-on:click="programmingLanguages.push({ name: 'C++', level: 'Trainee' })">Add</button>
-            </div>
             <div class="d-grid mb-3">
                 <button class="btn btn-success" type="submit">Submit</button>
             </div>
